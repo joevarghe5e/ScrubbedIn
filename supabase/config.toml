@@ -1,0 +1,14 @@
+[api]
+port = 54321
+
+[db]
+port = 54322
+
+[studio]
+port = 54323
+
+[functions.generate-reflection]
+verify_jwt = true
+
+[functions.generate-briefing]
+verify_jwt = true

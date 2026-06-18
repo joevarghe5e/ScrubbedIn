@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { box-sizing: border-box; }
+
+  body {
+    background-color: #080E1A;
+    color: #E2E8F0;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #1E2D45; border-radius: 2px; }
+}
+
+@layer components {
+  /* Cards */
+  .card-premium {
+    @apply bg-[#0F1829] border border-[#1E2D45] rounded-2xl shadow-lg;
+  }
+  .card-glass {
+    background: rgba(15,24,41,0.8);
+    backdrop-filter: blur(12px);
+    @apply border border-[#1E2D45] rounded-2xl shadow-lg;
+  }
+
+  /* Pill selector */
+  .pill {
+    @apply px-3 py-1.5 rounded-full text-sm font-medium border transition-all duration-150 cursor-pointer select-none;
+  }
+  .pill-default {
+    @apply pill border-[#1E2D45] text-slate-400 hover:border-teal-500/50 hover:text-slate-300;
+  }
+  .pill-selected {
+    @apply pill border-teal-500 text-teal-300;
+    background: linear-gradient(135deg, rgba(20,184,166,0.15), rgba(6,182,212,0.1));
+  }
+
+  /* Teal button */
+  .btn-teal {
+    @apply flex items-center justify-center gap-2 py-3 px-6 rounded-2xl font-semibold text-white transition-all duration-150 disabled:opacity-40;
+    background: linear-gradient(135deg, #14B8A6, #06B6D4);
+  }
+  .btn-teal:not(:disabled):hover {
+    background: linear-gradient(135deg, #0d9488, #0891b2);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 25px rgba(20,184,166,0.25);
+  }
+  .btn-ghost {
+    @apply flex items-center justify-center gap-2 py-2.5 px-5 rounded-xl font-medium text-slate-400 border border-[#1E2D45] hover:border-slate-500 hover:text-slate-300 transition-all duration-150;
+  }
+}
+
+@layer utilities {
+  /* Animations */
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out both;
+  }
+  .animate-slide-up {
+    animation: slideUp 0.35s cubic-bezier(0.16,1,0.3,1) both;
+  }
+  .animate-shimmer {
+    background: linear-gradient(90deg, #0F1829 25%, #162035 50%, #0F1829 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+  .animate-progress {
+    animation: progressFill 0.8s cubic-bezier(0.4,0,0.2,1) both;
+  }
+  .teal-pulse {
+    animation: tealPulse 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+@keyframes progressFill {
+  from { width: 0%; }
+}
+@keyframes tealPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(20,184,166,0.4); }
+  50%       { box-shadow: 0 0 0 12px rgba(20,184,166,0); }
+}
