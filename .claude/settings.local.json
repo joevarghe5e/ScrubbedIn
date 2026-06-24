@@ -12,7 +12,12 @@
       "Bash(git commit -m ' *)",
       "Bash(git push *)",
       "Bash(gh pr *)",
-      "Bash(gh auth *)"
+      "Bash(gh auth *)",
+      "Bash(git fetch *)",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "Bash(git checkout *)",
+      "Bash(git pull *)",
+      "Bash(git merge *)"
     ]
   }
 }
