@@ -11,21 +11,21 @@ const SLOTS = ['morning', 'afternoon'] as const
 const SESSION_TYPES: SessionType[] = ['Ward Round', 'Theatre', 'Clinic', 'Lecture', 'Tutorial', 'Other']
 
 const TYPE_COLORS: Record<string, string> = {
-  'Ward Round': 'bg-blue-900 border-blue-500 text-blue-100',
-  'Theatre':    'bg-purple-900 border-purple-500 text-purple-100',
-  'Clinic':     'bg-teal-900 border-teal-500 text-teal-100',
-  'Lecture':    'bg-amber-900 border-amber-500 text-amber-100',
-  'Tutorial':   'bg-green-900 border-green-500 text-green-100',
-  'Other':      'bg-gray-800 border-gray-500 text-gray-100',
+  'Ward Round': 'bg-blue-50 border-blue-300 text-blue-900',
+  'Theatre':    'bg-purple-50 border-purple-300 text-purple-900',
+  'Clinic':     'bg-[#EEF2FF] border-[#1B2B6B]/40 text-[#1B2B6B]',
+  'Lecture':    'bg-amber-50 border-amber-300 text-amber-900',
+  'Tutorial':   'bg-green-50 border-green-300 text-green-900',
+  'Other':      'bg-gray-50 border-gray-300 text-gray-900',
 }
 
 const TYPE_BADGE: Record<string, string> = {
-  'Ward Round': 'bg-blue-500/20 text-blue-300',
-  'Theatre':    'bg-purple-500/20 text-purple-300',
-  'Clinic':     'bg-teal-500/20 text-teal-300',
-  'Lecture':    'bg-amber-500/20 text-amber-300',
-  'Tutorial':   'bg-green-500/20 text-green-300',
-  'Other':      'bg-gray-500/20 text-gray-300',
+  'Ward Round': 'bg-blue-100 text-blue-700',
+  'Theatre':    'bg-purple-100 text-purple-700',
+  'Clinic':     'bg-[#E0E7FF] text-[#1B2B6B]',
+  'Lecture':    'bg-amber-100 text-amber-700',
+  'Tutorial':   'bg-green-100 text-green-700',
+  'Other':      'bg-gray-100 text-gray-700',
 }
 
 const SPECIALTIES = [
@@ -203,15 +203,15 @@ export function PlacementPage() {
     <Layout>
       {/* Header */}
       <div className="flex items-center justify-between mb-5">
-        <h1 className="text-xl font-bold text-gray-900">Help on Placement</h1>
+        <h1 className="text-xl font-bold text-[#1B2B6B]">Help on Placement</h1>
         <button
           onClick={() => fileRef.current?.click()}
           disabled={parsing}
-          className="flex items-center gap-2 px-4 py-2 bg-brand-600 hover:bg-brand-700 disabled:opacity-50 text-white text-sm font-medium rounded-xl transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-white border border-[#1B2B6B] hover:bg-[#EEF2FF] disabled:opacity-50 text-[#1B2B6B] text-sm font-semibold rounded transition-colors"
         >
           {parsing ? (
             <>
-              <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              <span className="w-4 h-4 border-2 border-[#1B2B6B] border-t-transparent rounded-full animate-spin" />
               Reading timetable…
             </>
           ) : (
@@ -222,25 +222,25 @@ export function PlacementPage() {
       </div>
 
       {parseError && (
-        <div className="mb-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
+        <div className="mb-4 text-sm text-red-700 bg-red-50 border border-red-200 rounded px-4 py-3">
           {parseError}
-          <button onClick={() => setParseError(null)} className="ml-2 text-red-400 hover:text-red-600">✕</button>
+          <button onClick={() => setParseError(null)} className="ml-2 text-red-500 hover:text-red-700">✕</button>
         </div>
       )}
 
       {/* Week navigator */}
-      <div className="flex items-center justify-between mb-4 bg-white rounded-2xl border border-gray-200 px-4 py-3">
-        <button onClick={() => changeWeek(-1)} className="text-gray-400 hover:text-gray-600 text-lg px-2">‹</button>
+      <div className="flex items-center justify-between mb-4 bg-white rounded border border-[#E2E8F0] px-4 py-3">
+        <button onClick={() => changeWeek(-1)} className="text-slate-500 hover:text-[#1B2B6B] text-lg px-2">‹</button>
         <div className="text-center">
-          <p className="font-semibold text-gray-900 text-sm">Week of {formatWeek(weekStart)}</p>
+          <p className="font-semibold text-[#1B2B6B] text-sm">Week of {formatWeek(weekStart)}</p>
         </div>
-        <button onClick={() => changeWeek(1)} className="text-gray-400 hover:text-gray-600 text-lg px-2">›</button>
+        <button onClick={() => changeWeek(1)} className="text-slate-500 hover:text-[#1B2B6B] text-lg px-2">›</button>
       </div>
 
       {/* Timetable grid */}
       {loading ? (
         <div className="flex justify-center py-12">
-          <div className="w-6 h-6 border-2 border-brand-500 border-t-transparent rounded-full animate-spin" />
+          <div className="w-6 h-6 border-2 border-[#1B2B6B] border-t-transparent rounded-full animate-spin" />
         </div>
       ) : (
         <div className="space-y-3">
@@ -248,7 +248,7 @@ export function PlacementPage() {
             const dayNum = idx + 1
             return (
               <div key={dayName}>
-                <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5">{dayName}</p>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5">{dayName}</p>
                 <div className="grid grid-cols-2 gap-2">
                   {SLOTS.map(slot => {
                     const sess = getSession(dayNum, slot)
@@ -266,7 +266,7 @@ export function PlacementPage() {
                       <button
                         key={slot}
                         onClick={() => openAddModal(dayNum, slot)}
-                        className="h-16 rounded-xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center text-gray-300 hover:border-gray-300 hover:text-gray-400 transition-colors"
+                        className="h-16 rounded border-2 border-dashed border-[#E2E8F0] flex flex-col items-center justify-center text-slate-400 hover:border-[#1B2B6B]/40 hover:text-[#4A5568] transition-colors"
                       >
                         <span className="text-xl leading-none">+</span>
                         <span className="text-xs mt-0.5 capitalize">{slot}</span>
@@ -283,53 +283,53 @@ export function PlacementPage() {
       {/* Add session modal */}
       {addModal && (
         <div className="fixed inset-0 bg-black/50 flex items-end sm:items-center justify-center z-50 px-4">
-          <div className="bg-white rounded-2xl w-full max-w-sm p-5 shadow-xl">
+          <div className="bg-white rounded w-full max-w-sm p-5 shadow-xl border border-[#E2E8F0]">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="font-semibold text-gray-800">
+              <h2 className="font-semibold text-[#1B2B6B]">
                 Add session — {DAYS[addModal.day - 1]} {addModal.slot}
               </h2>
-              <button onClick={() => setAddModal(null)} className="text-gray-400 hover:text-gray-600">✕</button>
+              <button onClick={() => setAddModal(null)} className="text-slate-500 hover:text-[#1B2B6B]">✕</button>
             </div>
             <form onSubmit={handleAddSession} className="space-y-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Session name</label>
+                <label className="block text-sm font-medium text-[#4A5568] mb-1">Session name</label>
                 <input
                   type="text" required value={formName} onChange={e => setFormName(e.target.value)}
                   placeholder="e.g. Acute Medical Ward Round"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+                  className="w-full px-3 py-2 border border-[#E2E8F0] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#1B2B6B]/30"
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+                  <label className="block text-sm font-medium text-[#4A5568] mb-1">Type</label>
                   <select value={formType} onChange={e => setFormType(e.target.value as SessionType)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                    className="w-full px-3 py-2 border border-[#E2E8F0] rounded text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#1B2B6B]/30">
                     {SESSION_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Specialty</label>
+                  <label className="block text-sm font-medium text-[#4A5568] mb-1">Specialty</label>
                   <select value={formSpecialty} onChange={e => setFormSpecialty(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                    className="w-full px-3 py-2 border border-[#E2E8F0] rounded text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#1B2B6B]/30">
                     <option value="">Select…</option>
                     {SPECIALTIES.map(s => <option key={s} value={s}>{s}</option>)}
                   </select>
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Location <span className="text-gray-400 font-normal">(optional)</span></label>
+                <label className="block text-sm font-medium text-[#4A5568] mb-1">Location <span className="text-slate-500 font-normal">(optional)</span></label>
                 <input type="text" value={formLocation} onChange={e => setFormLocation(e.target.value)}
                   placeholder="e.g. Ward 4B, Outpatients B"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500" />
+                  className="w-full px-3 py-2 border border-[#E2E8F0] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#1B2B6B]/30" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Notes <span className="text-gray-400 font-normal">(optional)</span></label>
+                <label className="block text-sm font-medium text-[#4A5568] mb-1">Notes <span className="text-slate-500 font-normal">(optional)</span></label>
                 <input type="text" value={formNotes} onChange={e => setFormNotes(e.target.value)}
                   placeholder="Any extra context"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500" />
+                  className="w-full px-3 py-2 border border-[#E2E8F0] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#1B2B6B]/30" />
               </div>
               <button type="submit" disabled={saving}
-                className="w-full py-2.5 bg-brand-600 hover:bg-brand-700 disabled:opacity-50 text-white font-medium rounded-xl transition-colors text-sm mt-1">
+                className="w-full py-2.5 bg-white border border-[#1B2B6B] hover:bg-[#EEF2FF] disabled:opacity-50 text-[#1B2B6B] font-semibold rounded transition-colors text-sm mt-1">
                 {saving ? 'Adding…' : 'Add session'}
               </button>
             </form>
@@ -350,7 +350,7 @@ function SessionCard({ session, onOpen, onDelete }: {
   const hasBriefing = !!session.briefing_json
 
   return (
-    <div className={`relative rounded-xl border-l-4 p-3 cursor-pointer hover:opacity-90 transition-opacity ${colorClass}`}
+    <div className={`relative rounded border-l-4 p-3 cursor-pointer hover:opacity-90 transition-opacity ${colorClass}`}
       onClick={onOpen}>
       <div className="flex items-start justify-between gap-1">
         <div className="flex-1 min-w-0">

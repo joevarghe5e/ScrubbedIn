@@ -31,7 +31,7 @@ export function LogsPage() {
   return (
     <Layout>
       <div className="flex items-center justify-between mb-5">
-        <h1 className="text-xl font-bold text-slate-100">Portfolio</h1>
+        <h1 className="text-xl font-bold text-[#1B2B6B]">Portfolio</h1>
         <Link to="/logs/new" className="btn-teal py-2 px-4 text-sm">+ New log</Link>
       </div>
 
@@ -40,7 +40,7 @@ export function LogsPage() {
         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">🔍</span>
         <input value={search} onChange={e => setSearch(e.target.value)}
           placeholder="Search by title or specialty…"
-          className="w-full pl-9 pr-4 py-2.5 bg-[#0F1829] border border-[#1E2D45] rounded-xl text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-teal-500/50" />
+          className="w-full pl-9 pr-4 py-2.5 bg-white border border-[#E2E8F0] rounded text-sm text-[#1B2B6B] placeholder-slate-500 focus:outline-none focus:border-[#1B2B6B]" />
       </div>
 
       {/* Filter pills */}
@@ -54,11 +54,11 @@ export function LogsPage() {
       </div>
 
       {loading ? (
-        <div className="space-y-2">{[0,1,2,3].map(i => <div key={i} className="h-20 rounded-2xl animate-shimmer" />)}</div>
+        <div className="space-y-2">{[0,1,2,3].map(i => <div key={i} className="h-20 rounded animate-shimmer" />)}</div>
       ) : filtered.length === 0 ? (
         <div className="text-center py-16">
           <p className="text-4xl mb-3">🔍</p>
-          <p className="font-semibold text-slate-400">{search || filter !== 'All' ? 'No logs found' : 'No logs yet'}</p>
+          <p className="font-semibold text-[#4A5568]">{search || filter !== 'All' ? 'No logs found' : 'No logs yet'}</p>
           {!search && filter === 'All' && (
             <Link to="/logs/new" className="inline-block mt-4 btn-teal px-6 py-2.5 text-sm">Log your first case</Link>
           )}
@@ -69,17 +69,17 @@ export function LogsPage() {
             const col = specialtyColor(log.specialty)
             return (
               <Link key={log.id} to={`/logs/${log.id}`}
-                className="card-premium flex items-stretch gap-0 hover:bg-[#162035] transition-colors overflow-hidden">
+                className="card-premium flex items-stretch gap-0 hover:bg-[#EEF2FF] transition-colors overflow-hidden">
                 <div className="w-1 flex-shrink-0" style={{ background: col.accent }} />
                 <div className="flex-1 min-w-0 p-4">
                   <div className="flex items-start justify-between gap-2">
-                    <p className="text-sm font-semibold text-slate-200 truncate leading-tight">
+                    <p className="text-sm font-semibold text-[#1B2B6B] truncate leading-tight">
                       {log.presentation || 'Untitled encounter'}
                     </p>
                     <div className="flex items-center gap-1.5 flex-shrink-0">
-                      <div className={`w-2 h-2 rounded-full ${log.status === 'complete' ? 'bg-teal-400' : 'bg-amber-400'}`}
+                      <div className={`w-2 h-2 rounded-full ${log.status === 'complete' ? 'bg-emerald-500' : 'bg-amber-500'}`}
                         title={log.status === 'complete' ? 'Complete' : 'Draft'} />
-                      <span className="text-slate-600">›</span>
+                      <span className="text-slate-500">›</span>
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-1.5 mt-2">
@@ -87,12 +87,12 @@ export function LogsPage() {
                       <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: col.bg, color: col.text }}>{log.specialty}</span>
                     )}
                     {log.case_type && (
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-[#1E2D45] text-slate-400">{log.case_type}</span>
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-[#EEF2FF] text-[#4A5568]">{log.case_type}</span>
                     )}
                     {log.role && (
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-[#1E2D45] text-slate-400">{log.role}</span>
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-[#EEF2FF] text-[#4A5568]">{log.role}</span>
                     )}
-                    <span className="text-xs text-slate-600">{formatDate(log.encounter_date)}</span>
+                    <span className="text-xs text-slate-500">{formatDate(log.encounter_date)}</span>
                   </div>
                 </div>
               </Link>

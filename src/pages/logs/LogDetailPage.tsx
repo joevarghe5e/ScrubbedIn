@@ -86,7 +86,7 @@ export function LogDetailPage() {
     else { setReflection(data as Reflection); setError(null) }
   }
 
-  if (loading) return <Layout><div className="flex justify-center py-16"><div className="w-6 h-6 border-2 border-teal-400 border-t-transparent rounded-full animate-spin" /></div></Layout>
+  if (loading) return <Layout><div className="flex justify-center py-16"><div className="w-6 h-6 border-2 border-[#1B2B6B] border-t-transparent rounded-full animate-spin" /></div></Layout>
   if (!log) return null
 
   const col = specialtyColor(log.specialty)
@@ -96,15 +96,15 @@ export function LogDetailPage() {
       {/* Back */}
       <div className="flex items-center gap-3 mb-5">
         <button onClick={() => navigate('/logs')}
-          className="w-8 h-8 rounded-xl bg-[#0F1829] border border-[#1E2D45] flex items-center justify-center text-slate-400 hover:text-slate-200">‹</button>
-        <h1 className="text-lg font-bold text-slate-100 flex-1 truncate">{log.presentation || 'Clinical log'}</h1>
+          className="w-8 h-8 rounded bg-white border border-[#E2E8F0] flex items-center justify-center text-[#4A5568] hover:text-[#1B2B6B]">‹</button>
+        <h1 className="text-lg font-bold text-[#1B2B6B] flex-1 truncate">{log.presentation || 'Clinical log'}</h1>
         <button onClick={async () => {
           if (!confirm('Delete this log?')) return
           await supabase.from('reflections').delete().eq('log_id', id!)
           await supabase.from('clinical_log_competencies').delete().eq('log_id', id!)
           await supabase.from('clinical_logs').delete().eq('id', id!)
           navigate('/logs')
-        }} className="text-xs text-red-400 hover:text-red-300">Delete</button>
+        }} className="text-xs text-red-600 hover:text-red-700">Delete</button>
       </div>
 
       {/* Log card */}
@@ -113,23 +113,23 @@ export function LogDetailPage() {
         <div className="p-4 space-y-3">
           <div className="flex flex-wrap gap-2">
             {log.specialty && <span className="text-xs px-2.5 py-1 rounded-full" style={{ background: col.bg, color: col.text }}>{log.specialty}</span>}
-            {log.case_type && <span className="text-xs px-2.5 py-1 rounded-full bg-[#162035] text-slate-400">{log.case_type}</span>}
-            {log.role && <span className="text-xs px-2.5 py-1 rounded-full bg-[#162035] text-slate-400">{log.role}</span>}
-            <div className={`ml-auto flex items-center gap-1.5 text-xs ${log.status === 'complete' ? 'text-teal-400' : 'text-amber-400'}`}>
-              <div className={`w-1.5 h-1.5 rounded-full ${log.status === 'complete' ? 'bg-teal-400' : 'bg-amber-400'}`} />
+            {log.case_type && <span className="text-xs px-2.5 py-1 rounded-full bg-[#EEF2FF] text-[#4A5568]">{log.case_type}</span>}
+            {log.role && <span className="text-xs px-2.5 py-1 rounded-full bg-[#EEF2FF] text-[#4A5568]">{log.role}</span>}
+            <div className={`ml-auto flex items-center gap-1.5 text-xs ${log.status === 'complete' ? 'text-emerald-700' : 'text-amber-700'}`}>
+              <div className={`w-1.5 h-1.5 rounded-full ${log.status === 'complete' ? 'bg-emerald-500' : 'bg-amber-500'}`} />
               {log.status === 'complete' ? 'Complete' : 'Draft'}
             </div>
           </div>
 
-          <div className="flex gap-4 text-xs text-slate-500">
+          <div className="flex gap-4 text-xs text-[#4A5568]">
             <span>📅 {formatDate(log.encounter_date)}</span>
             {log.supervisor && <span>👤 {log.supervisor}</span>}
           </div>
 
           {log.presentation && (
             <div>
-              <p className="text-xs text-slate-500 mb-1">Description</p>
-              <p className="text-sm text-slate-300 leading-relaxed">{log.presentation}</p>
+              <p className="text-xs text-[#4A5568] mb-1">Description</p>
+              <p className="text-sm text-[#4A5568] leading-relaxed">{log.presentation}</p>
             </div>
           )}
 
@@ -137,14 +137,14 @@ export function LogDetailPage() {
             <div className="grid grid-cols-2 gap-3">
               {log.procedures_observed?.length > 0 && (
                 <div>
-                  <p className="text-xs text-slate-500 mb-1">Observed</p>
-                  <ul className="space-y-0.5">{log.procedures_observed.map((p,i) => <li key={i} className="text-xs text-slate-400">· {p}</li>)}</ul>
+                  <p className="text-xs text-[#4A5568] mb-1">Observed</p>
+                  <ul className="space-y-0.5">{log.procedures_observed.map((p,i) => <li key={i} className="text-xs text-[#4A5568]">· {p}</li>)}</ul>
                 </div>
               )}
               {log.procedures_performed?.length > 0 && (
                 <div>
-                  <p className="text-xs text-slate-500 mb-1">Performed</p>
-                  <ul className="space-y-0.5">{log.procedures_performed.map((p,i) => <li key={i} className="text-xs text-slate-400">· {p}</li>)}</ul>
+                  <p className="text-xs text-[#4A5568] mb-1">Performed</p>
+                  <ul className="space-y-0.5">{log.procedures_performed.map((p,i) => <li key={i} className="text-xs text-[#4A5568]">· {p}</li>)}</ul>
                 </div>
               )}
             </div>
@@ -152,7 +152,7 @@ export function LogDetailPage() {
 
           {log.competencies.length > 0 && (
             <div>
-              <p className="text-xs text-slate-500 mb-1.5">Competencies</p>
+              <p className="text-xs text-[#4A5568] mb-1.5">Competencies</p>
               <div className="flex flex-wrap gap-1.5">
                 {log.competencies.map(c => (
                   <span key={c.id} className="text-xs px-2 py-0.5 rounded-full" style={{ background: col.bg, color: col.text }}>
@@ -168,8 +168,8 @@ export function LogDetailPage() {
       {/* Reflection */}
       <div className="card-premium p-4">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="font-semibold text-slate-200">Reflection</h2>
-          {reflection?.approved_at && <span className="text-xs bg-teal-500/10 text-teal-400 border border-teal-500/20 rounded-full px-2 py-0.5">Saved</span>}
+          <h2 className="font-semibold text-[#1B2B6B]">Reflection</h2>
+          {reflection?.approved_at && <span className="text-xs bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full px-2 py-0.5">Saved</span>}
         </div>
 
         <div className="flex gap-2 mb-4">
@@ -186,30 +186,30 @@ export function LogDetailPage() {
         ) : generating ? (
           <div className="flex flex-col items-center py-8 gap-3">
             <div className="w-10 h-10 rounded-full teal-pulse flex items-center justify-center"
-              style={{ background: 'rgba(20,184,166,0.15)', border: '2px solid #14B8A6' }}>
-              <div className="w-4 h-4 border-2 border-teal-400 border-t-transparent rounded-full animate-spin" />
+              style={{ background: 'rgba(27,43,107,0.08)', border: '2px solid #1B2B6B' }}>
+              <div className="w-4 h-4 border-2 border-[#1B2B6B] border-t-transparent rounded-full animate-spin" />
             </div>
-            <p className="text-sm text-slate-400">Generating {framework} reflection…</p>
+            <p className="text-sm text-[#4A5568]">Generating {framework} reflection…</p>
           </div>
         ) : (
           <div className="space-y-2">
             {(Object.keys(reflSections).length > 0 ? Object.entries(reflSections) : [['Full text', reflText]]).map(([sec, content]) => {
               const isOpen = expandedSections.has(sec)
               return (
-                <div key={sec} className="bg-[#162035] rounded-xl overflow-hidden">
-                  <button className="w-full flex items-center justify-between px-4 py-3 hover:bg-[#1a2840] transition-colors"
+                <div key={sec} className="bg-[#EEF2FF] rounded overflow-hidden">
+                  <button className="w-full flex items-center justify-between px-4 py-3 hover:bg-[#E0E7FF] transition-colors"
                     onClick={() => setExpandedSections(p => { const n = new Set(p); n.has(sec) ? n.delete(sec) : n.add(sec); return n })}>
-                    <span className="text-sm font-medium text-slate-300">{sec}</span>
+                    <span className="text-sm font-medium text-[#4A5568]">{sec}</span>
                     <span className="text-slate-500 text-xs">{isOpen ? '▲' : '▼'}</span>
                   </button>
                   {isOpen && (
-                    <div className="px-4 pb-3 border-t border-[#1E2D45]">
+                    <div className="px-4 pb-3 border-t border-[#E2E8F0]">
                       <textarea rows={4} value={content}
                         onChange={e => {
                           if (sec === 'Full text') setReflText(e.target.value)
                           else setReflSections(p => ({ ...p, [sec]: e.target.value }))
                         }}
-                        className="w-full mt-2.5 px-3 py-2 bg-[#0F1829] border border-[#1E2D45] rounded-lg text-sm text-slate-300 focus:outline-none focus:border-teal-500/50 resize-none" />
+                        className="w-full mt-2.5 px-3 py-2 bg-white border border-[#E2E8F0] rounded text-sm text-[#4A5568] focus:outline-none focus:border-[#1B2B6B] resize-none" />
                     </div>
                   )}
                 </div>
@@ -223,12 +223,12 @@ export function LogDetailPage() {
             </div>
           </div>
         )}
-        {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
+        {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
       </div>
 
       {/* Log this session CTA if came from placement */}
       <div className="mt-4 text-center">
-        <Link to="/logs/new" className="text-xs text-teal-400 hover:text-teal-300">+ Log another case</Link>
+        <Link to="/logs/new" className="text-xs text-[#1B2B6B] hover:underline">+ Log another case</Link>
       </div>
     </Layout>
   )

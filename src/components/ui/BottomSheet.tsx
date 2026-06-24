@@ -15,8 +15,8 @@ export function BottomSheet({ open, onClose, title, children }: Props) {
         onClick={e => e.stopPropagation()}
       >
         <div className="flex items-center justify-between px-5 pt-5 pb-3">
-          {title && <h2 className="font-semibold text-slate-200">{title}</h2>}
-          <button onClick={onClose} className="ml-auto text-slate-500 hover:text-slate-300 text-xl leading-none">✕</button>
+          {title && <h2 className="font-semibold text-[#1B2B6B]">{title}</h2>}
+          <button onClick={onClose} className="ml-auto text-slate-400 hover:text-[#1B2B6B] text-xl leading-none">✕</button>
         </div>
         <div className="px-5 pb-8">{children}</div>
       </div>

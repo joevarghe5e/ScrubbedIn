@@ -134,12 +134,12 @@ export function NewLogPage() {
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
         <button onClick={() => step > 1 ? setStep(s => s-1) : navigate('/logs')}
-          className="w-8 h-8 rounded-xl bg-[#0F1829] border border-[#1E2D45] flex items-center justify-center text-slate-400 hover:text-slate-200">
+          className="w-8 h-8 rounded bg-white border border-[#E2E8F0] flex items-center justify-center text-[#4A5568] hover:text-[#1B2B6B]">
           ‹
         </button>
         <div className="flex-1">
-          <h1 className="text-lg font-bold text-slate-100">New log</h1>
-          <p className="text-xs text-slate-500">Step {step} of 4</p>
+          <h1 className="text-lg font-bold text-[#1B2B6B]">New log</h1>
+          <p className="text-xs text-[#4A5568]">Step {step} of 4</p>
         </div>
       </div>
 
@@ -147,7 +147,7 @@ export function NewLogPage() {
       <div className="flex gap-1.5 mb-6">
         {[1,2,3,4].map(n => (
           <div key={n} className="flex-1 h-1 rounded-full transition-all duration-300"
-            style={{ background: n <= step ? '#14B8A6' : '#1E2D45' }} />
+            style={{ background: n <= step ? '#1B2B6B' : '#E2E8F0' }} />
         ))}
       </div>
 
@@ -155,18 +155,18 @@ export function NewLogPage() {
       {step === 1 && (
         <div className="space-y-4 animate-fade-in">
           <div className="card-premium p-4 space-y-4">
-            <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wide">Details</h2>
+            <h2 className="text-sm font-semibold text-[#4A5568] uppercase tracking-wide">Details</h2>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-medium text-slate-400 mb-1.5">Date</label>
+                <label className="block text-xs font-medium text-[#4A5568] mb-1.5">Date</label>
                 <input type="date" value={form.encounterDate} onChange={e => set('encounterDate', e.target.value)}
-                  className="w-full px-3 py-2.5 bg-[#162035] border border-[#1E2D45] rounded-xl text-sm text-slate-200 focus:outline-none focus:border-teal-500/50" />
+                  className="w-full px-3 py-2.5 bg-white border border-[#E2E8F0] rounded text-sm text-[#1B2B6B] focus:outline-none focus:border-[#1B2B6B]" />
               </div>
               <div>
-                <label className="block text-xs font-medium text-slate-400 mb-1.5">Specialty</label>
+                <label className="block text-xs font-medium text-[#4A5568] mb-1.5">Specialty</label>
                 <select value={form.specialty} onChange={e => set('specialty', e.target.value)}
-                  className="w-full px-3 py-2.5 bg-[#162035] border border-[#1E2D45] rounded-xl text-sm text-slate-200 focus:outline-none focus:border-teal-500/50">
+                  className="w-full px-3 py-2.5 bg-white border border-[#E2E8F0] rounded text-sm text-[#1B2B6B] focus:outline-none focus:border-[#1B2B6B]">
                   <option value="">Select…</option>
                   {SPECIALTIES.map(s => <option key={s} value={s}>{s}</option>)}
                 </select>
@@ -174,7 +174,7 @@ export function NewLogPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-2">Case type</label>
+              <label className="block text-xs font-medium text-[#4A5568] mb-2">Case type</label>
               <div className="flex flex-wrap gap-2">
                 {CASE_TYPES.map(t => (
                   <button key={t} type="button" onClick={() => set('caseType', t)}
@@ -186,7 +186,7 @@ export function NewLogPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-2">Your role</label>
+              <label className="block text-xs font-medium text-[#4A5568] mb-2">Your role</label>
               <div className="flex flex-wrap gap-2">
                 {ROLES.map(r => (
                   <button key={r} type="button" onClick={() => set('role', r)}
@@ -198,10 +198,10 @@ export function NewLogPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1.5">Supervisor <span className="text-slate-600 font-normal">(optional)</span></label>
+              <label className="block text-xs font-medium text-[#4A5568] mb-1.5">Supervisor <span className="text-slate-500 font-normal">(optional)</span></label>
               <input type="text" value={form.supervisor} onChange={e => set('supervisor', e.target.value)}
                 placeholder="e.g. Dr Smith"
-                className="w-full px-3 py-2.5 bg-[#162035] border border-[#1E2D45] rounded-xl text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-teal-500/50" />
+                className="w-full px-3 py-2.5 bg-white border border-[#E2E8F0] rounded text-sm text-[#1B2B6B] placeholder-slate-500 focus:outline-none focus:border-[#1B2B6B]" />
             </div>
           </div>
           <button onClick={() => setStep(2)} className="btn-teal w-full">Continue →</button>
@@ -212,45 +212,45 @@ export function NewLogPage() {
       {step === 2 && (
         <div className="space-y-4 animate-fade-in">
           <div className="card-premium p-4 space-y-4">
-            <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wide">What happened?</h2>
+            <h2 className="text-sm font-semibold text-[#4A5568] uppercase tracking-wide">What happened?</h2>
 
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1.5">Case summary / presentation *</label>
+              <label className="block text-xs font-medium text-[#4A5568] mb-1.5">Case summary / presentation *</label>
               <textarea rows={4} value={form.presentation} onChange={e => set('presentation', e.target.value)}
                 placeholder="Describe the patient, presentation, and key clinical details…"
-                className="w-full px-3 py-2.5 bg-[#162035] border border-[#1E2D45] rounded-xl text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-teal-500/50 resize-none" />
+                className="w-full px-3 py-2.5 bg-white border border-[#E2E8F0] rounded text-sm text-[#1B2B6B] placeholder-slate-500 focus:outline-none focus:border-[#1B2B6B] resize-none" />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-medium text-slate-400 mb-1.5">Procedures observed <span className="text-slate-600">(one per line)</span></label>
+                <label className="block text-xs font-medium text-[#4A5568] mb-1.5">Procedures observed <span className="text-slate-500">(one per line)</span></label>
                 <textarea rows={3} value={form.proceduresObserved} onChange={e => set('proceduresObserved', e.target.value)}
                   placeholder="IV cannulation&#10;ECG interpretation"
-                  className="w-full px-3 py-2.5 bg-[#162035] border border-[#1E2D45] rounded-xl text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-teal-500/50 resize-none" />
+                  className="w-full px-3 py-2.5 bg-white border border-[#E2E8F0] rounded text-sm text-[#1B2B6B] placeholder-slate-500 focus:outline-none focus:border-[#1B2B6B] resize-none" />
               </div>
               <div>
-                <label className="block text-xs font-medium text-slate-400 mb-1.5">Procedures performed <span className="text-slate-600">(one per line)</span></label>
+                <label className="block text-xs font-medium text-[#4A5568] mb-1.5">Procedures performed <span className="text-slate-500">(one per line)</span></label>
                 <textarea rows={3} value={form.proceduresPerformed} onChange={e => set('proceduresPerformed', e.target.value)}
                   placeholder="Venepuncture&#10;Urinalysis"
-                  className="w-full px-3 py-2.5 bg-[#162035] border border-[#1E2D45] rounded-xl text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-teal-500/50 resize-none" />
+                  className="w-full px-3 py-2.5 bg-white border border-[#E2E8F0] rounded text-sm text-[#1B2B6B] placeholder-slate-500 focus:outline-none focus:border-[#1B2B6B] resize-none" />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1.5">Learning points</label>
+              <label className="block text-xs font-medium text-[#4A5568] mb-1.5">Learning points</label>
               <textarea rows={2} value={form.learningPoints} onChange={e => set('learningPoints', e.target.value)}
                 placeholder="Key takeaways from this encounter…"
-                className="w-full px-3 py-2.5 bg-[#162035] border border-[#1E2D45] rounded-xl text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-teal-500/50 resize-none" />
+                className="w-full px-3 py-2.5 bg-white border border-[#E2E8F0] rounded text-sm text-[#1B2B6B] placeholder-slate-500 focus:outline-none focus:border-[#1B2B6B] resize-none" />
             </div>
 
             {/* Competency tags */}
             {competencies.length > 0 && (
               <div>
-                <label className="block text-xs font-medium text-slate-400 mb-2">Tag competencies</label>
+                <label className="block text-xs font-medium text-[#4A5568] mb-2">Tag competencies</label>
                 <div className="space-y-3">
                   {Object.entries(byCategory).map(([cat, comps]) => (
                     <div key={cat}>
-                      <p className="text-xs text-slate-600 uppercase tracking-wider mb-1.5">{cat}</p>
+                      <p className="text-xs text-slate-500 uppercase tracking-wider mb-1.5">{cat}</p>
                       <div className="flex flex-wrap gap-1.5">
                         {comps.map(c => (
                           <button key={c.id} type="button" onClick={() => toggleComp(c.id)}
@@ -279,46 +279,46 @@ export function NewLogPage() {
           {generating ? (
             <div className="card-premium p-8 flex flex-col items-center gap-4">
               <div className="w-12 h-12 rounded-full teal-pulse flex items-center justify-center"
-                style={{ background: 'rgba(20,184,166,0.15)', border: '2px solid #14B8A6' }}>
-                <div className="w-5 h-5 border-2 border-teal-400 border-t-transparent rounded-full animate-spin" />
+                style={{ background: 'rgba(27,43,107,0.08)', border: '2px solid #1B2B6B' }}>
+                <div className="w-5 h-5 border-2 border-[#1B2B6B] border-t-transparent rounded-full animate-spin" />
               </div>
               <div className="text-center">
-                <p className="font-medium text-slate-200">Generating reflection…</p>
-                <p className="text-sm text-slate-500 mt-1">Claude is writing your Gibbs reflection</p>
+                <p className="font-medium text-[#1B2B6B]">Generating reflection…</p>
+                <p className="text-sm text-[#4A5568] mt-1">Claude is writing your Gibbs reflection</p>
               </div>
               {/* Blurred teasers */}
               <div className="w-full space-y-2 mt-2">
                 {['Clinical Checklist','Red Flags','Questions'].map(s => (
-                  <div key={s} className="h-12 rounded-xl bg-[#162035] border border-[#1E2D45] flex items-center px-4">
+                  <div key={s} className="h-12 rounded bg-[#EEF2FF] border border-[#E2E8F0] flex items-center px-4">
                     <div className="flex-1 h-3 rounded animate-shimmer" />
-                    <span className="text-xs text-slate-600 ml-3">{s}</span>
+                    <span className="text-xs text-slate-500 ml-3">{s}</span>
                   </div>
                 ))}
               </div>
             </div>
           ) : error ? (
             <div className="card-premium p-5 text-center">
-              <p className="text-red-400 text-sm mb-3">{error}</p>
+              <p className="text-red-600 text-sm mb-3">{error}</p>
               <button onClick={generateReflection} className="btn-teal mx-auto">Retry</button>
             </div>
           ) : (
             <div className="space-y-2">
-              <p className="text-xs text-slate-500 mb-3">Review and edit your Gibbs reflection — all sections auto-generated.</p>
+              <p className="text-xs text-[#4A5568] mb-3">Review and edit your Gibbs reflection — all sections auto-generated.</p>
               {REFLECTION_SECTIONS.map(sec => {
                 const content = reflectionSections[sec] || ''
                 const isOpen = expandedSections.has(sec)
                 return (
                   <div key={sec} className="card-premium overflow-hidden">
-                    <button className="w-full flex items-center justify-between px-4 py-3.5 hover:bg-[#162035] transition-colors"
+                    <button className="w-full flex items-center justify-between px-4 py-3.5 hover:bg-[#EEF2FF] transition-colors"
                       onClick={() => setExpandedSections(prev => { const n = new Set(prev); n.has(sec) ? n.delete(sec) : n.add(sec); return n })}>
-                      <span className="text-sm font-semibold text-slate-200">{sec}</span>
+                      <span className="text-sm font-semibold text-[#1B2B6B]">{sec}</span>
                       <span className="text-slate-500 text-xs">{isOpen ? '▲' : '▼'}</span>
                     </button>
                     {isOpen && (
-                      <div className="px-4 pb-4 border-t border-[#1E2D45]">
+                      <div className="px-4 pb-4 border-t border-[#E2E8F0]">
                         <textarea rows={4} value={content}
                           onChange={e => setReflectionSections(prev => ({ ...prev, [sec]: e.target.value }))}
-                          className="w-full mt-3 px-3 py-2.5 bg-[#162035] border border-[#1E2D45] rounded-xl text-sm text-slate-300 focus:outline-none focus:border-teal-500/50 resize-none" />
+                          className="w-full mt-3 px-3 py-2.5 bg-[#EEF2FF] border border-[#E2E8F0] rounded text-sm text-[#4A5568] focus:outline-none focus:border-[#1B2B6B] resize-none" />
                       </div>
                     )}
                   </div>
@@ -338,30 +338,30 @@ export function NewLogPage() {
       {step === 4 && (
         <div className="space-y-4 animate-fade-in">
           <div className="card-premium p-4 space-y-3">
-            <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wide">Summary</h2>
+            <h2 className="text-sm font-semibold text-[#4A5568] uppercase tracking-wide">Summary</h2>
             <div className="grid grid-cols-2 gap-3 text-sm">
-              <div><span className="text-slate-500">Date</span><p className="text-slate-200 mt-0.5">{form.encounterDate}</p></div>
-              <div><span className="text-slate-500">Specialty</span><p className="text-slate-200 mt-0.5">{form.specialty || '—'}</p></div>
-              <div><span className="text-slate-500">Case type</span><p className="text-slate-200 mt-0.5">{form.caseType || '—'}</p></div>
-              <div><span className="text-slate-500">Role</span><p className="text-slate-200 mt-0.5">{form.role || '—'}</p></div>
+              <div><span className="text-slate-500">Date</span><p className="text-[#1B2B6B] mt-0.5">{form.encounterDate}</p></div>
+              <div><span className="text-slate-500">Specialty</span><p className="text-[#1B2B6B] mt-0.5">{form.specialty || '—'}</p></div>
+              <div><span className="text-slate-500">Case type</span><p className="text-[#1B2B6B] mt-0.5">{form.caseType || '—'}</p></div>
+              <div><span className="text-slate-500">Role</span><p className="text-[#1B2B6B] mt-0.5">{form.role || '—'}</p></div>
             </div>
-            <div className="border-t border-[#1E2D45] pt-3">
+            <div className="border-t border-[#E2E8F0] pt-3">
               <span className="text-xs text-slate-500">Presentation</span>
-              <p className="text-sm text-slate-300 mt-1 line-clamp-3">{form.presentation}</p>
+              <p className="text-sm text-[#4A5568] mt-1 line-clamp-3">{form.presentation}</p>
             </div>
             {form.selectedCompetencies.length > 0 && (
-              <div className="border-t border-[#1E2D45] pt-3">
+              <div className="border-t border-[#E2E8F0] pt-3">
                 <span className="text-xs text-slate-500">{form.selectedCompetencies.length} competencies tagged</span>
               </div>
             )}
             {reflection && (
-              <div className="border-t border-[#1E2D45] pt-3 flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-teal-400" />
-                <span className="text-xs text-teal-400">Gibbs reflection ready</span>
+              <div className="border-t border-[#E2E8F0] pt-3 flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                <span className="text-xs text-emerald-700">Gibbs reflection ready</span>
               </div>
             )}
           </div>
-          {error && <p className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-3 py-2">{error}</p>}
+          {error && <p className="text-sm text-red-700 bg-red-50 border border-red-200 rounded px-3 py-2">{error}</p>}
           <div className="grid grid-cols-2 gap-3">
             <button onClick={() => saveLog('draft')} disabled={saving} className="btn-ghost">
               {saving ? '…' : 'Save draft'}

@@ -102,18 +102,18 @@ export function SpecialtiesPage() {
 
   return (
     <Layout>
-      <h1 className="text-xl font-bold text-gray-900 mb-2">Specialty Requirements</h1>
-      <p className="text-sm text-gray-400 mb-5">Select target specialties to see their portfolio requirements and where they overlap.</p>
+      <h1 className="text-xl font-bold text-[#1B2B6B] mb-2">Specialty Requirements</h1>
+      <p className="text-sm text-[#4A5568] mb-5">Select target specialties to see their portfolio requirements and where they overlap.</p>
 
       {loading ? (
         <div className="flex justify-center py-12">
-          <div className="w-6 h-6 border-2 border-brand-500 border-t-transparent rounded-full animate-spin" />
+          <div className="w-6 h-6 border-2 border-[#1B2B6B] border-t-transparent rounded-full animate-spin" />
         </div>
       ) : (
         <>
           {/* Specialty selector */}
-          <div className="bg-white rounded-2xl border border-gray-200 p-4 mb-5">
-            <p className="text-sm font-medium text-gray-700 mb-3">Target specialties</p>
+          <div className="bg-white rounded border border-[#E2E8F0] p-4 mb-5">
+            <p className="text-sm font-medium text-[#4A5568] mb-3">Target specialties</p>
             <div className="flex flex-wrap gap-2">
               {availableSpecialties.map(s => (
                 <button
@@ -121,8 +121,8 @@ export function SpecialtiesPage() {
                   onClick={() => toggleSpecialty(s)}
                   className={`px-3 py-1.5 rounded-full text-sm border-2 font-medium transition-colors ${
                     selectedSpecialties.includes(s)
-                      ? 'border-brand-500 bg-brand-50 text-brand-700'
-                      : 'border-gray-200 text-gray-500 hover:border-gray-300'
+                      ? 'border-[#1B2B6B] bg-[#EEF2FF] text-[#1B2B6B]'
+                      : 'border-[#E2E8F0] text-slate-500 hover:border-slate-300'
                   }`}
                 >
                   {s}
@@ -132,7 +132,7 @@ export function SpecialtiesPage() {
           </div>
 
           {selectedSpecialties.length === 0 ? (
-            <div className="text-center py-12 text-gray-400">
+            <div className="text-center py-12 text-slate-500">
               <p className="text-3xl mb-2">🎯</p>
               <p className="text-sm">Select at least one specialty above to see requirements.</p>
             </div>
@@ -140,17 +140,17 @@ export function SpecialtiesPage() {
             <>
               {/* Summary */}
               <div className="grid grid-cols-3 gap-3 mb-4">
-                <div className="bg-white rounded-2xl border border-gray-200 p-3 text-center">
-                  <p className="text-xl font-bold text-gray-900">{reqList.length}</p>
-                  <p className="text-xs text-gray-400">Total requirements</p>
+                <div className="bg-white rounded border border-[#E2E8F0] p-3 text-center">
+                  <p className="text-xl font-bold text-[#1B2B6B]">{reqList.length}</p>
+                  <p className="text-xs text-[#4A5568]">Total requirements</p>
                 </div>
-                <div className="bg-white rounded-2xl border border-gray-200 p-3 text-center">
-                  <p className="text-xl font-bold text-brand-600">{reqList.filter(r => r.isOverlap).length}</p>
-                  <p className="text-xs text-gray-400">Shared across specialties</p>
+                <div className="bg-white rounded border border-[#E2E8F0] p-3 text-center">
+                  <p className="text-xl font-bold text-[#1B2B6B]">{reqList.filter(r => r.isOverlap).length}</p>
+                  <p className="text-xs text-[#4A5568]">Shared across specialties</p>
                 </div>
-                <div className="bg-white rounded-2xl border border-gray-200 p-3 text-center">
-                  <p className="text-xl font-bold text-gray-900">{reqList.filter(r => !r.isOverlap).length}</p>
-                  <p className="text-xs text-gray-400">Specialty-specific</p>
+                <div className="bg-white rounded border border-[#E2E8F0] p-3 text-center">
+                  <p className="text-xl font-bold text-[#1B2B6B]">{reqList.filter(r => !r.isOverlap).length}</p>
+                  <p className="text-xs text-[#4A5568]">Specialty-specific</p>
                 </div>
               </div>
 
@@ -158,13 +158,13 @@ export function SpecialtiesPage() {
               <div className="flex gap-2 mb-4">
                 <button
                   onClick={() => setFilterOverlap(false)}
-                  className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors ${!filterOverlap ? 'border-brand-500 bg-brand-50 text-brand-700' : 'border-gray-200 text-gray-500'}`}
+                  className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors ${!filterOverlap ? 'border-[#1B2B6B] bg-[#EEF2FF] text-[#1B2B6B]' : 'border-[#E2E8F0] text-slate-500'}`}
                 >
                   All requirements
                 </button>
                 <button
                   onClick={() => setFilterOverlap(true)}
-                  className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors ${filterOverlap ? 'border-brand-500 bg-brand-50 text-brand-700' : 'border-gray-200 text-gray-500'}`}
+                  className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors ${filterOverlap ? 'border-[#1B2B6B] bg-[#EEF2FF] text-[#1B2B6B]' : 'border-[#E2E8F0] text-slate-500'}`}
                 >
                   Overlaps only ✨
                 </button>
@@ -178,28 +178,28 @@ export function SpecialtiesPage() {
                   return (
                     <div
                       key={i}
-                      className={`bg-white rounded-xl border p-4 ${req.isOverlap ? 'border-brand-200' : 'border-gray-200'}`}
+                      className={`bg-white rounded border p-4 ${req.isOverlap ? 'border-[#C7D2FE]' : 'border-[#E2E8F0]'}`}
                     >
                       <div className="flex items-start gap-3">
                         <span className="text-xl mt-0.5">{TYPE_ICON[req.requirement_type] ?? '📌'}</span>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <p className="text-sm font-medium text-gray-800">{req.requirement_name}</p>
+                            <p className="text-sm font-medium text-[#1B2B6B]">{req.requirement_name}</p>
                             {req.isOverlap && (
-                              <span className="text-xs bg-brand-50 text-brand-600 border border-brand-200 rounded-full px-1.5 py-0.5">
+                              <span className="text-xs bg-[#EEF2FF] text-[#1B2B6B] border border-[#C7D2FE] rounded-full px-1.5 py-0.5">
                                 Shared
                               </span>
                             )}
                           </div>
-                          <p className="text-xs text-gray-400 mt-0.5">
+                          <p className="text-xs text-[#4A5568] mt-0.5">
                             Required by: {req.specialties.join(', ')} · Min. {req.minimum_count}
                           </p>
                           {req.requirement_type === 'case_log' && progress > 0 && (
                             <div className="mt-2">
-                              <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                                <div className="h-full bg-brand-500 rounded-full" style={{ width: `${pct}%` }} />
+                              <div className="h-1.5 bg-[#E2E8F0] rounded-full overflow-hidden">
+                                <div className="h-full bg-[#1B2B6B] rounded-full" style={{ width: `${pct}%` }} />
                               </div>
-                              <p className="text-xs text-gray-400 mt-0.5">{progress}/{req.minimum_count} from logs</p>
+                              <p className="text-xs text-[#4A5568] mt-0.5">{progress}/{req.minimum_count} from logs</p>
                             </div>
                           )}
                         </div>
