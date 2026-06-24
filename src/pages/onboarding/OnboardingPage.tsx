@@ -78,7 +78,7 @@ export function OnboardingPage() {
           ))}
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+        <div className="bg-white rounded shadow-sm border border-[#E2E8F0] p-8">
           {step === 1 && (
             <>
               <h2 className="text-xl font-semibold mb-1">What stage are you at?</h2>
@@ -88,7 +88,7 @@ export function OnboardingPage() {
                   <button
                     key={value}
                     onClick={() => setTrainingStage(value)}
-                    className={`w-full text-left px-4 py-3 rounded-xl border-2 transition-colors text-sm font-medium ${
+                    className={`w-full text-left px-4 py-3 rounded border-2 transition-colors text-sm font-medium ${
                       trainingStage === value
                         ? 'border-brand-500 bg-brand-50 text-brand-700'
                         : 'border-gray-200 hover:border-gray-300 text-gray-700'
@@ -101,7 +101,7 @@ export function OnboardingPage() {
               <button
                 disabled={!trainingStage}
                 onClick={() => setStep(2)}
-                className="mt-6 w-full py-2.5 bg-brand-600 hover:bg-brand-700 disabled:opacity-40 text-white font-medium rounded-xl transition-colors"
+                className="mt-6 w-full py-2.5 bg-white border border-[#1B2B6B] hover:bg-[#EEF2FF] disabled:opacity-40 text-[#1B2B6B] font-semibold rounded transition-colors"
               >
                 Continue
               </button>
@@ -117,7 +117,7 @@ export function OnboardingPage() {
                   <button
                     key={value}
                     onClick={() => setCurriculum(value)}
-                    className={`w-full text-left px-4 py-3 rounded-xl border-2 transition-colors ${
+                    className={`w-full text-left px-4 py-3 rounded border-2 transition-colors ${
                       curriculum === value
                         ? 'border-brand-500 bg-brand-50'
                         : 'border-gray-200 hover:border-gray-300'
@@ -131,13 +131,13 @@ export function OnboardingPage() {
               <div className="flex gap-3 mt-6">
                 <button
                   onClick={() => setStep(1)}
-                  className="flex-1 py-2.5 border border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-colors"
+                  className="flex-1 py-2.5 border border-gray-300 text-gray-700 font-medium rounded hover:bg-gray-50 transition-colors"
                 >
                   Back
                 </button>
                 <button
                   onClick={() => setStep(3)}
-                  className="flex-1 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-medium rounded-xl transition-colors"
+                  className="flex-1 py-2.5 bg-white border border-[#1B2B6B] hover:bg-[#EEF2FF] text-[#1B2B6B] font-semibold rounded transition-colors"
                 >
                   Continue
                 </button>
@@ -172,14 +172,14 @@ export function OnboardingPage() {
               <div className="flex gap-3 mt-6">
                 <button
                   onClick={() => setStep(2)}
-                  className="flex-1 py-2.5 border border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-colors"
+                  className="flex-1 py-2.5 border border-gray-300 text-gray-700 font-medium rounded hover:bg-gray-50 transition-colors"
                 >
                   Back
                 </button>
                 <button
                   disabled={saving}
                   onClick={handleComplete}
-                  className="flex-1 py-2.5 bg-brand-600 hover:bg-brand-700 disabled:opacity-50 text-white font-medium rounded-xl transition-colors"
+                  className="flex-1 py-2.5 bg-white border border-[#1B2B6B] hover:bg-[#EEF2FF] disabled:opacity-50 text-[#1B2B6B] font-semibold rounded transition-colors"
                 >
                   {saving ? 'Saving…' : 'Get started'}
                 </button>

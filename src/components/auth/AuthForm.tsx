@@ -25,7 +25,7 @@ export function AuthForm({ mode, onSubmit, error, loading }: Props) {
           required
           value={email}
           onChange={e => setEmail(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+          className="w-full px-3 py-2 border border-[#E2E8F0] rounded focus:outline-none focus:ring-2 focus:ring-[#1B2B6B]/30 focus:border-transparent"
           placeholder="you@example.com"
         />
       </div>
@@ -37,17 +37,17 @@ export function AuthForm({ mode, onSubmit, error, loading }: Props) {
           minLength={8}
           value={password}
           onChange={e => setPassword(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+          className="w-full px-3 py-2 border border-[#E2E8F0] rounded focus:outline-none focus:ring-2 focus:ring-[#1B2B6B]/30 focus:border-transparent"
           placeholder="••••••••"
         />
       </div>
       {error && (
-        <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{error}</p>
+        <p className="text-sm text-red-700 bg-red-50 border border-red-200 rounded px-3 py-2">{error}</p>
       )}
       <button
         type="submit"
         disabled={loading}
-        className="w-full py-2.5 px-4 bg-brand-600 hover:bg-brand-700 disabled:opacity-50 text-white font-medium rounded-lg transition-colors"
+        className="w-full py-2.5 px-4 bg-white border border-[#1B2B6B] hover:bg-[#EEF2FF] disabled:opacity-50 text-[#1B2B6B] font-semibold rounded transition-colors"
       >
         {loading ? 'Please wait…' : mode === 'login' ? 'Sign in' : 'Create account'}
       </button>

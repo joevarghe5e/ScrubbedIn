@@ -38,55 +38,54 @@ export function ProfilePage() {
 
   return (
     <Layout>
-      <h1 className="text-xl font-bold text-slate-100 mb-5">Profile</h1>
+      <h1 className="text-xl font-bold text-[#1B2B6B] mb-5">Profile</h1>
 
       {/* Avatar card */}
-      <div className="card-premium p-5 flex items-center gap-4 mb-5"
-        style={{ background: 'radial-gradient(ellipse at top right, rgba(20,184,166,0.12) 0%, rgba(8,14,26,0) 60%), #0F1829' }}>
-        <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-xl font-bold text-teal-300 flex-shrink-0"
-          style={{ background: 'rgba(20,184,166,0.15)', border: '2px solid rgba(20,184,166,0.4)' }}>
+      <div className="card-premium p-5 flex items-center gap-4 mb-5 bg-[#EEF2FF]">
+        <div className="w-14 h-14 rounded flex items-center justify-center text-xl font-bold text-[#1B2B6B] flex-shrink-0"
+          style={{ background: 'rgba(27,43,107,0.10)', border: '2px solid rgba(27,43,107,0.3)' }}>
           {initials}
         </div>
         <div>
-          <p className="font-semibold text-slate-100 capitalize">{user?.email?.split('@')[0] ?? 'User'}</p>
-          <p className="text-sm text-slate-500 mt-0.5">{user?.email}</p>
+          <p className="font-semibold text-[#1B2B6B] capitalize">{user?.email?.split('@')[0] ?? 'User'}</p>
+          <p className="text-sm text-[#4A5568] mt-0.5">{user?.email}</p>
           {profile?.training_stage && (
-            <p className="text-xs text-teal-400 mt-1">{profile.training_stage} · {profile.curriculum}</p>
+            <p className="text-xs text-[#1B2B6B] mt-1">{profile.training_stage} · {profile.curriculum}</p>
           )}
         </div>
       </div>
 
       {/* Settings rows */}
-      <div className="card-premium divide-y divide-[#1E2D45] mb-5">
+      <div className="card-premium divide-y divide-[#E2E8F0] mb-5">
         {rows.map(r => (
           <button key={r.label}
-            className={`w-full flex items-center gap-3 px-4 py-4 text-left ${r.editable ? 'hover:bg-[#162035] transition-colors' : 'cursor-default'}`}
+            className={`w-full flex items-center gap-3 px-4 py-4 text-left ${r.editable ? 'hover:bg-[#EEF2FF] transition-colors' : 'cursor-default'}`}
             onClick={r.editable ? r.onClick : undefined}
             disabled={!r.editable}>
             <span className="text-lg flex-shrink-0">{r.icon}</span>
             <div className="flex-1 min-w-0">
-              <p className="text-xs text-slate-500">{r.label}</p>
-              <p className="text-sm text-slate-200 mt-0.5">{r.value}</p>
+              <p className="text-xs text-[#4A5568]">{r.label}</p>
+              <p className="text-sm text-[#1B2B6B] mt-0.5">{r.value}</p>
             </div>
-            {r.editable && <span className="text-slate-600 text-sm">›</span>}
+            {r.editable && <span className="text-slate-500 text-sm">›</span>}
           </button>
         ))}
       </div>
 
       {/* App info */}
-      <div className="card-premium divide-y divide-[#1E2D45] mb-6">
+      <div className="card-premium divide-y divide-[#E2E8F0] mb-6">
         <div className="flex items-center gap-3 px-4 py-4">
           <span className="text-lg">ℹ️</span>
           <div className="flex-1">
-            <p className="text-xs text-slate-500">Version</p>
-            <p className="text-sm text-slate-200">ScrubbedIn MVP 1.0</p>
+            <p className="text-xs text-[#4A5568]">Version</p>
+            <p className="text-sm text-[#1B2B6B]">ScrubbedIn MVP 1.0</p>
           </div>
         </div>
       </div>
 
       {/* Sign out */}
       <button onClick={handleSignOut}
-        className="w-full py-3 rounded-2xl border border-red-500/30 text-red-400 text-sm font-semibold hover:bg-red-500/10 transition-colors">
+        className="w-full py-3 rounded border border-red-200 text-red-600 text-sm font-semibold hover:bg-red-50 transition-colors">
         Sign out
       </button>
 

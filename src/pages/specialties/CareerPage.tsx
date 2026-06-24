@@ -83,27 +83,27 @@ export function CareerPage() {
   return (
     <Layout>
       <div className="flex items-center justify-between mb-5">
-        <h1 className="text-xl font-bold text-slate-100">Career</h1>
+        <h1 className="text-xl font-bold text-[#1B2B6B]">Career</h1>
       </div>
 
       {/* Specialty targets */}
       <section className="mb-6">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="font-semibold text-slate-200">Your Specialty Targets</h2>
+          <h2 className="font-semibold text-[#1B2B6B]">Your Specialty Targets</h2>
           <button onClick={() => { setSelected(interests); setEditOpen(true) }}
-            className="text-xs text-teal-400 hover:text-teal-300 flex items-center gap-1">
+            className="text-xs text-[#1B2B6B] hover:underline flex items-center gap-1">
             ✏️ Edit
           </button>
         </div>
 
         {loading ? (
           <div className="grid grid-cols-2 gap-2">
-            {[0,1,2,3].map(i => <div key={i} className="h-16 rounded-2xl animate-shimmer" />)}
+            {[0,1,2,3].map(i => <div key={i} className="h-16 rounded animate-shimmer" />)}
           </div>
         ) : interests.length === 0 ? (
           <div className="card-premium p-6 text-center">
             <p className="text-3xl mb-2">🎯</p>
-            <p className="text-sm text-slate-400 mb-3">No specialty targets set</p>
+            <p className="text-sm text-[#4A5568] mb-3">No specialty targets set</p>
             <button onClick={() => setEditOpen(true)} className="btn-teal text-sm px-5 py-2">Add specialties</button>
           </div>
         ) : (
@@ -115,7 +115,7 @@ export function CareerPage() {
                   <div className="h-0.5" style={{ background: col.accent }} />
                   <div className="p-3 flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: col.accent }} />
-                    <span className="text-sm font-medium text-slate-200 leading-tight">{sp}</span>
+                    <span className="text-sm font-medium text-[#1B2B6B] leading-tight">{sp}</span>
                   </div>
                 </div>
               )
@@ -127,17 +127,17 @@ export function CareerPage() {
       {/* Combined requirements */}
       {reqs.length > 0 && (
         <section className="mb-6">
-          <h2 className="font-semibold text-slate-200 mb-3">Combined Requirements</h2>
+          <h2 className="font-semibold text-[#1B2B6B] mb-3">Combined Requirements</h2>
           <div className="card-premium p-4 space-y-4">
             {reqs.map(r => {
               const pct = r.required > 0 ? Math.min(100, Math.round((r.done / r.required) * 100)) : 0
               return (
                 <div key={r.type}>
                   <div className="flex justify-between text-xs mb-1.5">
-                    <span className="text-slate-300 font-medium capitalize">{r.name}</span>
+                    <span className="text-[#4A5568] font-medium capitalize">{r.name}</span>
                     <span className="text-slate-500">{r.done}/{r.required}</span>
                   </div>
-                  <AnimatedBar pct={pct} color={pct >= 100 ? '#14B8A6' : pct >= 50 ? '#6366F1' : '#F59E0B'} />
+                  <AnimatedBar pct={pct} color={pct >= 100 ? '#1B2B6B' : pct >= 50 ? '#6366F1' : '#F59E0B'} />
                 </div>
               )
             })}
@@ -148,18 +148,18 @@ export function CareerPage() {
       {/* Gap analysis */}
       {gaps.length > 0 && (
         <section>
-          <h2 className="font-semibold text-slate-200 mb-3">Gap Analysis</h2>
+          <h2 className="font-semibold text-[#1B2B6B] mb-3">Gap Analysis</h2>
           <div className="space-y-2">
             {gaps.map(g => (
-              <div key={g.type} className="card-premium p-4 border-l-2 border-amber-500/50">
+              <div key={g.type} className="card-premium p-4 border-l-2 border-amber-400">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="text-sm font-semibold text-slate-200 capitalize">{g.name}</p>
-                    <p className="text-xs text-slate-500 mt-0.5">
+                    <p className="text-sm font-semibold text-[#1B2B6B] capitalize">{g.name}</p>
+                    <p className="text-xs text-[#4A5568] mt-0.5">
                       {g.done} of {g.required} required — {Math.round((g.done / g.required) * 100)}% complete
                     </p>
                   </div>
-                  <span className="text-amber-400 text-lg flex-shrink-0">⚠️</span>
+                  <span className="text-amber-600 text-lg flex-shrink-0">⚠️</span>
                 </div>
                 <div className="mt-2.5">
                   <AnimatedBar pct={Math.round((g.done / g.required) * 100)} color="#F59E0B" />
@@ -173,7 +173,7 @@ export function CareerPage() {
       {interests.length > 0 && reqs.length === 0 && !loading && (
         <div className="card-premium p-6 text-center mt-4">
           <p className="text-3xl mb-2">📊</p>
-          <p className="text-sm text-slate-400">Requirements data loading…</p>
+          <p className="text-sm text-[#4A5568]">Requirements data loading…</p>
         </div>
       )}
 

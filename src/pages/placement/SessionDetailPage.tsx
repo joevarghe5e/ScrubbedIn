@@ -73,7 +73,7 @@ export function SessionDetailPage() {
     finally { setGenerating(false) }
   }
 
-  if (loading) return <Layout><div className="flex justify-center py-16"><div className="w-6 h-6 border-2 border-teal-400 border-t-transparent rounded-full animate-spin" /></div></Layout>
+  if (loading) return <Layout><div className="flex justify-center py-16"><div className="w-6 h-6 border-2 border-[#1B2B6B] border-t-transparent rounded-full animate-spin" /></div></Layout>
   if (!session) return null
 
   const briefing = session.briefing_json
@@ -82,7 +82,7 @@ export function SessionDetailPage() {
   return (
     <Layout>
       <button onClick={() => navigate('/placement')}
-        className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-300 mb-4">
+        className="flex items-center gap-1.5 text-sm text-[#4A5568] hover:text-[#1B2B6B] mb-4">
         ‹ Back
       </button>
 
@@ -98,13 +98,13 @@ export function SessionDetailPage() {
               </span>
             )}
           </div>
-          <h1 className="text-lg font-bold text-slate-100">{session.session_name ?? 'Session'}</h1>
-          <p className="text-sm text-slate-500 mt-1">
+          <h1 className="text-lg font-bold text-[#1B2B6B]">{session.session_name ?? 'Session'}</h1>
+          <p className="text-sm text-[#4A5568] mt-1">
             {DAYS[session.day_of_week]} · {session.time_slot.charAt(0).toUpperCase() + session.time_slot.slice(1)}
             {session.location && ` · ${session.location}`}
             {session.specialty && ` · ${session.specialty}`}
           </p>
-          {session.notes && <p className="text-sm text-slate-400 mt-2">{session.notes}</p>}
+          {session.notes && <p className="text-sm text-[#4A5568] mt-2">{session.notes}</p>}
         </div>
       </div>
 
@@ -115,11 +115,11 @@ export function SessionDetailPage() {
               {/* Teaser cards */}
               <div className="space-y-2 mb-5">
                 {['Clinical Checklist','Red Flags','Questions for Doctor'].map(s => (
-                  <div key={s} className="flex items-center gap-3 p-3 rounded-xl bg-[#162035] blur-[1.5px] opacity-60">
-                    <div className="w-8 h-8 rounded-lg bg-[#1E2D45] flex-shrink-0" />
+                  <div key={s} className="flex items-center gap-3 p-3 rounded bg-[#EEF2FF] blur-[1.5px] opacity-60">
+                    <div className="w-8 h-8 rounded bg-[#E2E8F0] flex-shrink-0" />
                     <div className="flex-1 space-y-1.5">
-                      <div className="h-2 bg-[#1E2D45] rounded w-1/3" />
-                      <div className="h-2 bg-[#1E2D45] rounded w-2/3" />
+                      <div className="h-2 bg-[#E2E8F0] rounded w-1/3" />
+                      <div className="h-2 bg-[#E2E8F0] rounded w-2/3" />
                     </div>
                   </div>
                 ))}
@@ -131,16 +131,16 @@ export function SessionDetailPage() {
           ) : (
             <div className="flex flex-col items-center gap-4 py-4">
               <div className="w-14 h-14 rounded-full teal-pulse flex items-center justify-center"
-                style={{ background: 'rgba(20,184,166,0.12)', border: '2px solid #14B8A6' }}>
-                <div className="w-6 h-6 border-2 border-teal-400 border-t-transparent rounded-full animate-spin" />
+                style={{ background: 'rgba(27,43,107,0.08)', border: '2px solid #1B2B6B' }}>
+                <div className="w-6 h-6 border-2 border-[#1B2B6B] border-t-transparent rounded-full animate-spin" />
               </div>
               <div>
-                <p className="font-semibold text-slate-200">Generating your briefing…</p>
-                <p className="text-sm text-slate-500 mt-1">Claude is preparing all 10 sections</p>
+                <p className="font-semibold text-[#1B2B6B]">Generating your briefing…</p>
+                <p className="text-sm text-[#4A5568] mt-1">Claude is preparing all 10 sections</p>
               </div>
             </div>
           )}
-          {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
+          {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
         </div>
       ) : (
         <div className="space-y-2 mb-4">
@@ -151,24 +151,24 @@ export function SessionDetailPage() {
 
             return (
               <div key={sec.key} className="card-premium overflow-hidden">
-                <button className="w-full flex items-center justify-between px-4 py-3.5 hover:bg-[#162035] transition-colors"
+                <button className="w-full flex items-center justify-between px-4 py-3.5 hover:bg-[#EEF2FF] transition-colors"
                   onClick={() => toggle(sec.key as string)}>
-                  <span className="flex items-center gap-2.5 text-sm font-semibold text-slate-200">
+                  <span className="flex items-center gap-2.5 text-sm font-semibold text-[#1B2B6B]">
                     <span>{sec.icon}</span>{sec.title}
                   </span>
                   <span className="text-slate-500 text-xs">{isOpen ? '▲' : '▼'}</span>
                 </button>
 
                 {isOpen && (
-                  <div className="px-4 pb-4 border-t border-[#1E2D45]">
+                  <div className="px-4 pb-4 border-t border-[#E2E8F0]">
                     {sec.type === 'text' && (
-                      <p className="text-sm text-slate-400 mt-3 leading-relaxed">{content as string}</p>
+                      <p className="text-sm text-[#4A5568] mt-3 leading-relaxed">{content as string}</p>
                     )}
                     {sec.type === 'list' && (
                       <ul className="mt-3 space-y-2">
                         {(content as string[]).map((item, i) => (
-                          <li key={i} className="flex gap-2.5 text-sm text-slate-400">
-                            <span className="text-teal-500 flex-shrink-0 mt-0.5">•</span>{item}
+                          <li key={i} className="flex gap-2.5 text-sm text-[#4A5568]">
+                            <span className="text-[#1B2B6B] flex-shrink-0 mt-0.5">•</span>{item}
                           </li>
                         ))}
                       </ul>
@@ -180,10 +180,10 @@ export function SessionDetailPage() {
                           return (
                             <li key={i} className="flex gap-2.5 text-sm cursor-pointer"
                               onClick={() => setChecked(p => { const n = new Set(p); n.has(key) ? n.delete(key) : n.add(key); return n })}>
-                              <div className={`w-4 h-4 rounded border flex-shrink-0 mt-0.5 flex items-center justify-center transition-colors ${checked.has(key) ? 'bg-teal-500 border-teal-500' : 'border-[#1E2D45]'}`}>
+                              <div className={`w-4 h-4 rounded border flex-shrink-0 mt-0.5 flex items-center justify-center transition-colors ${checked.has(key) ? 'bg-[#1B2B6B] border-[#1B2B6B]' : 'border-[#E2E8F0]'}`}>
                                 {checked.has(key) && <span className="text-white text-xs">✓</span>}
                               </div>
-                              <span className={checked.has(key) ? 'text-slate-600 line-through' : 'text-slate-400'}>{item}</span>
+                              <span className={checked.has(key) ? 'text-slate-500 line-through' : 'text-[#4A5568]'}>{item}</span>
                             </li>
                           )
                         })}
@@ -192,8 +192,8 @@ export function SessionDetailPage() {
                     {sec.type === 'conditions' && (
                       <div className="mt-3 space-y-2">
                         {(content as { name: string; key_points: string }[]).map((c, i) => (
-                          <div key={i} className="bg-[#162035] rounded-xl px-3 py-2.5">
-                            <p className="text-sm font-semibold text-slate-300">{c.name}</p>
+                          <div key={i} className="bg-[#EEF2FF] rounded px-3 py-2.5">
+                            <p className="text-sm font-semibold text-[#4A5568]">{c.name}</p>
                             <p className="text-xs text-slate-500 mt-0.5">{c.key_points}</p>
                           </div>
                         ))}
@@ -204,7 +204,7 @@ export function SessionDetailPage() {
                         {(content as string[]).map((item, i) => (
                           <li key={i} className="flex gap-2.5 text-sm">
                             <span className="flex-shrink-0">🚨</span>
-                            <span className="text-slate-400">{item}</span>
+                            <span className="text-[#4A5568]">{item}</span>
                           </li>
                         ))}
                       </ul>
@@ -222,14 +222,14 @@ export function SessionDetailPage() {
 
       {/* Log this session CTA */}
       <Link to={`/logs/new?specialty=${encodeURIComponent(session.specialty ?? '')}`}
-        className="card-premium p-4 flex items-center gap-3 hover:bg-[#162035] transition-colors">
-        <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
-          style={{ background: 'rgba(20,184,166,0.12)', border: '1px solid rgba(20,184,166,0.3)' }}>🩺</div>
+        className="card-premium p-4 flex items-center gap-3 hover:bg-[#EEF2FF] transition-colors">
+        <div className="w-10 h-10 rounded flex items-center justify-center text-xl flex-shrink-0"
+          style={{ background: 'rgba(27,43,107,0.08)', border: '1px solid rgba(27,43,107,0.25)' }}>🩺</div>
         <div>
-          <p className="text-sm font-semibold text-slate-200">Log this session</p>
+          <p className="text-sm font-semibold text-[#1B2B6B]">Log this session</p>
           <p className="text-xs text-slate-500 mt-0.5">Add a clinical log for today's placement</p>
         </div>
-        <span className="ml-auto text-slate-600">›</span>
+        <span className="ml-auto text-slate-500">›</span>
       </Link>
     </Layout>
   )

@@ -11,15 +11,15 @@ interface ExamSyllabus {
 }
 
 const EXAM_COLORS: Record<string, { bg: string; text: string; accent: string; border: string }> = {
-  'MSRA':         { bg: 'rgba(20,184,166,0.12)',  text: '#14B8A6', accent: '#14B8A6', border: 'rgba(20,184,166,0.3)' },
-  'MRCS':         { bg: 'rgba(99,102,241,0.12)',  text: '#818CF8', accent: '#6366F1', border: 'rgba(99,102,241,0.3)' },
-  'MRCP Part 1':  { bg: 'rgba(245,158,11,0.12)',  text: '#FCD34D', accent: '#F59E0B', border: 'rgba(245,158,11,0.3)' },
-  'MRCGP AKT':    { bg: 'rgba(16,185,129,0.12)',  text: '#34D399', accent: '#10B981', border: 'rgba(16,185,129,0.3)' },
-  'MRCEM Primary':{ bg: 'rgba(239,68,68,0.12)',   text: '#FCA5A5', accent: '#EF4444', border: 'rgba(239,68,68,0.3)' },
+  'MSRA':         { bg: 'rgba(27,43,107,0.08)',   text: '#1B2B6B', accent: '#1B2B6B', border: 'rgba(27,43,107,0.25)' },
+  'MRCS':         { bg: 'rgba(99,102,241,0.10)',  text: '#4338CA', accent: '#6366F1', border: 'rgba(99,102,241,0.3)' },
+  'MRCP Part 1':  { bg: 'rgba(245,158,11,0.10)',  text: '#B45309', accent: '#F59E0B', border: 'rgba(245,158,11,0.3)' },
+  'MRCGP AKT':    { bg: 'rgba(16,185,129,0.10)',  text: '#0F766E', accent: '#10B981', border: 'rgba(16,185,129,0.3)' },
+  'MRCEM Primary':{ bg: 'rgba(239,68,68,0.10)',   text: '#B91C1C', accent: '#EF4444', border: 'rgba(239,68,68,0.3)' },
 }
 
 function examColor(exam: string) {
-  return EXAM_COLORS[exam] ?? { bg: 'rgba(100,116,139,0.12)', text: '#94A3B8', accent: '#64748B', border: 'rgba(100,116,139,0.3)' }
+  return EXAM_COLORS[exam] ?? { bg: 'rgba(100,116,139,0.10)', text: '#334155', accent: '#64748B', border: 'rgba(100,116,139,0.3)' }
 }
 
 export function ExamsPage() {
@@ -61,18 +61,18 @@ export function ExamsPage() {
   return (
     <Layout>
       <div className="flex items-center justify-between mb-5">
-        <h1 className="text-xl font-bold text-slate-100">Exams</h1>
+        <h1 className="text-xl font-bold text-[#1B2B6B]">Exams</h1>
       </div>
 
       {/* High-yield overlap section */}
       {overlapping.length > 0 && (
         <section className="mb-6">
-          <h2 className="font-semibold text-slate-200 mb-1">High-Yield Topics</h2>
-          <p className="text-xs text-slate-500 mb-3">Topics across multiple exams — study these first</p>
+          <h2 className="font-semibold text-[#1B2B6B] mb-1">High-Yield Topics</h2>
+          <p className="text-xs text-[#4A5568] mb-3">Topics across multiple exams — study these first</p>
           <div className="space-y-2">
             {overlapping.map(([topic, exs]) => (
               <div key={topic} className="card-premium p-3.5">
-                <p className="text-sm font-semibold text-slate-200 mb-2">{topic}</p>
+                <p className="text-sm font-semibold text-[#1B2B6B] mb-2">{topic}</p>
                 <div className="flex flex-wrap gap-1.5">
                   {exs.map(ex => {
                     const col = examColor(ex)
@@ -103,7 +103,7 @@ export function ExamsPage() {
                 className="flex-shrink-0 text-xs px-3 py-1.5 rounded-full font-semibold transition-all"
                 style={isActive
                   ? { background: col.bg, color: col.text, border: `1px solid ${col.border}` }
-                  : { background: 'transparent', color: '#64748B', border: '1px solid #1E2D45' }}>
+                  : { background: 'transparent', color: '#4A5568', border: '1px solid #E2E8F0' }}>
                 {ex}
               </button>
             )
@@ -115,11 +115,11 @@ export function ExamsPage() {
       {activeExam && (
         <section>
           <div className="flex items-center justify-between mb-3">
-            <h2 className="font-semibold text-slate-200">{activeExam} Syllabus</h2>
-            <span className="text-xs text-slate-500">{topics.length} topics</span>
+            <h2 className="font-semibold text-[#1B2B6B]">{activeExam} Syllabus</h2>
+            <span className="text-xs text-[#4A5568]">{topics.length} topics</span>
           </div>
           {loading ? (
-            <div className="space-y-2">{[0,1,2,3,4].map(i => <div key={i} className="h-12 rounded-2xl animate-shimmer" />)}</div>
+            <div className="space-y-2">{[0,1,2,3,4].map(i => <div key={i} className="h-12 rounded animate-shimmer" />)}</div>
           ) : (
             <div className="space-y-1.5">
               {topics.map(topic => {
@@ -129,21 +129,21 @@ export function ExamsPage() {
                 const isOverlap = (topicExamMap[topic]?.length ?? 0) > 1
                 return (
                   <div key={topic} className="card-premium overflow-hidden">
-                    <button className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#162035] transition-colors"
+                    <button className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#EEF2FF] transition-colors"
                       onClick={() => subtopics.length > 0 && toggleExpand(topic)}>
                       <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: col.accent }} />
-                      <span className="flex-1 text-sm text-slate-300 text-left">{topic}</span>
-                      {isOverlap && <span className="text-xs text-amber-400 flex-shrink-0">★ High-yield</span>}
+                      <span className="flex-1 text-sm text-[#4A5568] text-left">{topic}</span>
+                      {isOverlap && <span className="text-xs text-amber-600 flex-shrink-0">★ High-yield</span>}
                       {subtopics.length > 0 && (
                         <span className="text-slate-500 text-xs flex-shrink-0">{isOpen ? '▲' : '▼'}</span>
                       )}
                     </button>
                     {isOpen && subtopics.length > 0 && (
-                      <div className="px-4 pb-3 border-t border-[#1E2D45]">
+                      <div className="px-4 pb-3 border-t border-[#E2E8F0]">
                         <ul className="mt-2 space-y-1">
                           {subtopics.map(r => (
-                            <li key={r.id} className="flex gap-2 text-xs text-slate-500">
-                              <span className="text-teal-600 flex-shrink-0">–</span>{r.subtopic}
+                            <li key={r.id} className="flex gap-2 text-xs text-[#4A5568]">
+                              <span className="text-[#1B2B6B] flex-shrink-0">–</span>{r.subtopic}
                             </li>
                           ))}
                         </ul>

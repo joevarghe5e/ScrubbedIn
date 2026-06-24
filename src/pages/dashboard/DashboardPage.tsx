@@ -82,12 +82,11 @@ export function DashboardPage() {
   return (
     <Layout>
       {/* Greeting */}
-      <div className="relative mb-6 overflow-hidden rounded-2xl p-5"
-        style={{ background: 'radial-gradient(ellipse at top right, rgba(20,184,166,0.18) 0%, rgba(8,14,26,0) 60%), #0F1829', border: '1px solid #1E2D45' }}>
-        <p className="text-sm text-slate-400">{greeting()},</p>
-        <h1 className="text-2xl font-bold text-slate-100 mt-0.5 capitalize">{name}</h1>
+      <div className="relative mb-6 overflow-hidden rounded p-5 bg-[#EEF2FF] border border-[#E2E8F0]">
+        <p className="text-sm text-[#4A5568]">{greeting()},</p>
+        <h1 className="text-2xl font-bold text-[#1B2B6B] mt-0.5 capitalize">{name}</h1>
         {profile?.training_stage && (
-          <p className="text-sm text-slate-500 mt-1">{profile.training_stage} · {profile.curriculum}</p>
+          <p className="text-sm text-[#4A5568] mt-1">{profile.training_stage} · {profile.curriculum}</p>
         )}
       </div>
 
@@ -100,8 +99,8 @@ export function DashboardPage() {
         ].map(s => (
           <div key={s.label} className="card-premium p-3 text-center">
             <div className="text-xl mb-1">{s.icon}</div>
-            <div className="text-2xl font-bold text-slate-100">{loading ? '—' : s.value}</div>
-            <div className="text-xs text-slate-500 mt-0.5 leading-tight">{s.label}</div>
+            <div className="text-2xl font-bold text-[#1B2B6B]">{loading ? '—' : s.value}</div>
+            <div className="text-xs text-[#4A5568] mt-0.5 leading-tight">{s.label}</div>
           </div>
         ))}
       </div>
@@ -119,14 +118,14 @@ export function DashboardPage() {
       {/* Recent logs */}
       <section className="mb-6">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="font-semibold text-slate-200">Recent logs</h2>
-          <Link to="/logs" className="text-xs text-teal-400 hover:text-teal-300">See all</Link>
+          <h2 className="font-semibold text-[#1B2B6B]">Recent logs</h2>
+          <Link to="/logs" className="text-xs text-[#1B2B6B] hover:underline">See all</Link>
         </div>
         {loading ? (
-          <div className="space-y-2">{[0,1,2].map(i => <div key={i} className="h-16 rounded-2xl animate-shimmer" />)}</div>
+          <div className="space-y-2">{[0,1,2].map(i => <div key={i} className="h-16 rounded animate-shimmer" />)}</div>
         ) : recentLogs.length === 0 ? (
           <div className="card-premium p-6 text-center">
-            <p className="text-slate-500 text-sm">No logs yet — <Link to="/logs/new" className="text-teal-400">log your first case</Link></p>
+            <p className="text-[#4A5568] text-sm">No logs yet — <Link to="/logs/new" className="text-[#1B2B6B]">log your first case</Link></p>
           </div>
         ) : (
           <div className="space-y-2">
@@ -134,23 +133,23 @@ export function DashboardPage() {
               const col = specialtyColor(log.specialty)
               return (
                 <Link key={log.id} to={`/logs/${log.id}`}
-                  className="card-premium flex items-center gap-3 p-4 hover:bg-[#162035] transition-colors">
+                  className="card-premium flex items-center gap-3 p-4 hover:bg-[#EEF2FF] transition-colors">
                   <div className="w-1 self-stretch rounded-full flex-shrink-0" style={{ background: col.accent }} />
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-slate-200 truncate">{log.presentation || 'Untitled encounter'}</p>
+                    <p className="text-sm font-medium text-[#1B2B6B] truncate">{log.presentation || 'Untitled encounter'}</p>
                     <div className="flex items-center gap-2 mt-1 flex-wrap">
                       {log.specialty && (
                         <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: col.bg, color: col.text }}>{log.specialty}</span>
                       )}
                       {log.role && (
-                        <span className="text-xs text-slate-500">{log.role}</span>
+                        <span className="text-xs text-[#4A5568]">{log.role}</span>
                       )}
-                      <span className="text-xs text-slate-600">{formatDate(log.encounter_date)}</span>
+                      <span className="text-xs text-slate-500">{formatDate(log.encounter_date)}</span>
                     </div>
                   </div>
                   <div className="flex-shrink-0 flex items-center gap-2">
-                    <div className={`w-2 h-2 rounded-full ${log.status === 'complete' ? 'bg-teal-400' : 'bg-amber-400'}`} />
-                    <span className="text-slate-600 text-sm">›</span>
+                    <div className={`w-2 h-2 rounded-full ${log.status === 'complete' ? 'bg-emerald-500' : 'bg-amber-500'}`} />
+                    <span className="text-slate-500 text-sm">›</span>
                   </div>
                 </Link>
               )
@@ -163,8 +162,8 @@ export function DashboardPage() {
       {categories.length > 0 && (
         <section>
           <div className="flex items-center justify-between mb-3">
-            <h2 className="font-semibold text-slate-200">Competency progress</h2>
-            <Link to="/progress" className="text-xs text-teal-400 hover:text-teal-300">Full view</Link>
+            <h2 className="font-semibold text-[#1B2B6B]">Competency progress</h2>
+            <Link to="/progress" className="text-xs text-[#1B2B6B] hover:underline">Full view</Link>
           </div>
           <div className="card-premium p-4 space-y-3">
             {categories.map(cat => {
@@ -172,7 +171,7 @@ export function DashboardPage() {
               return (
                 <div key={cat.name}>
                   <div className="flex justify-between text-xs mb-1.5">
-                    <span className="text-slate-400 font-medium">{cat.name}</span>
+                    <span className="text-[#4A5568] font-medium">{cat.name}</span>
                     <span className="text-slate-500">{pct}%</span>
                   </div>
                   <AnimatedBar pct={pct} />

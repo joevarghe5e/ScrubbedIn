@@ -17,15 +17,15 @@ const STATUS_LABEL: Record<string, string> = {
   not_started: 'Not started',
 }
 const STATUS_COLOR: Record<string, string> = {
-  signed_off: 'bg-green-100 text-green-700 border-green-200',
-  performed: 'bg-brand-100 text-brand-700 border-brand-200',
-  observed: 'bg-yellow-100 text-yellow-700 border-yellow-200',
-  not_started: 'bg-gray-100 text-gray-500 border-gray-200',
+  signed_off: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+  performed: 'bg-[#EEF2FF] text-[#1B2B6B] border-[#C7D2FE]',
+  observed: 'bg-amber-50 text-amber-700 border-amber-200',
+  not_started: 'bg-gray-50 text-slate-500 border-[#E2E8F0]',
 }
 const BAR_COLOR: Record<string, string> = {
-  signed_off: 'bg-green-500',
-  performed: 'bg-brand-500',
-  observed: 'bg-yellow-400',
+  signed_off: 'bg-emerald-500',
+  performed: 'bg-[#1B2B6B]',
+  observed: 'bg-amber-400',
   not_started: 'bg-gray-200',
 }
 
@@ -90,28 +90,28 @@ export function ProgressPage() {
 
   return (
     <Layout>
-      <h1 className="text-xl font-bold text-gray-900 mb-2">Curriculum Progress</h1>
-      <p className="text-sm text-gray-400 mb-6">{profile?.curriculum ?? 'UKMLA'} · Based on your logged cases</p>
+      <h1 className="text-xl font-bold text-[#1B2B6B] mb-2">Curriculum Progress</h1>
+      <p className="text-sm text-[#4A5568] mb-6">{profile?.curriculum ?? 'UKMLA'} · Based on your logged cases</p>
 
       {loading ? (
         <div className="flex justify-center py-12">
-          <div className="w-6 h-6 border-2 border-brand-500 border-t-transparent rounded-full animate-spin" />
+          <div className="w-6 h-6 border-2 border-[#1B2B6B] border-t-transparent rounded-full animate-spin" />
         </div>
       ) : (
         <>
           {/* Summary stats */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
             {STATUS_ORDER.map(s => (
-              <div key={s} className="bg-white rounded-2xl border border-gray-200 p-4">
-                <p className="text-2xl font-bold text-gray-900">{counts[s]}</p>
-                <p className="text-xs text-gray-400 mt-0.5">{STATUS_LABEL[s]}</p>
-                <p className="text-xs text-gray-300">{pct(counts[s])}% of {counts.total}</p>
+              <div key={s} className="bg-white rounded border border-[#E2E8F0] p-4">
+                <p className="text-2xl font-bold text-[#1B2B6B]">{counts[s]}</p>
+                <p className="text-xs text-[#4A5568] mt-0.5">{STATUS_LABEL[s]}</p>
+                <p className="text-xs text-slate-400">{pct(counts[s])}% of {counts.total}</p>
               </div>
             ))}
           </div>
 
           {/* Stacked progress bar */}
-          <div className="bg-white rounded-2xl border border-gray-200 p-4 mb-6">
+          <div className="bg-white rounded border border-[#E2E8F0] p-4 mb-6">
             <div className="flex h-3 rounded-full overflow-hidden gap-0.5">
               {STATUS_ORDER.filter(s => counts[s] > 0).map(s => (
                 <div
@@ -126,7 +126,7 @@ export function ProgressPage() {
               {STATUS_ORDER.map(s => (
                 <div key={s} className="flex items-center gap-1.5">
                   <div className={`w-2 h-2 rounded-full ${BAR_COLOR[s]}`} />
-                  <span className="text-xs text-gray-500">{STATUS_LABEL[s]}</span>
+                  <span className="text-xs text-[#4A5568]">{STATUS_LABEL[s]}</span>
                 </div>
               ))}
             </div>
@@ -140,8 +140,8 @@ export function ProgressPage() {
                 onClick={() => setFilterCategory(cat)}
                 className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors ${
                   filterCategory === cat
-                    ? 'border-brand-500 bg-brand-50 text-brand-700'
-                    : 'border-gray-200 text-gray-500 hover:border-gray-300'
+                    ? 'border-[#1B2B6B] bg-[#EEF2FF] text-[#1B2B6B]'
+                    : 'border-[#E2E8F0] text-slate-500 hover:border-slate-300'
                 }`}
               >
                 {cat}
@@ -152,14 +152,14 @@ export function ProgressPage() {
           {/* Competency list */}
           <div className="space-y-2">
             {filtered.map(c => (
-              <div key={c.id} className="bg-white rounded-xl border border-gray-200 px-4 py-3 flex items-center gap-3">
+              <div key={c.id} className="bg-white rounded border border-[#E2E8F0] px-4 py-3 flex items-center gap-3">
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-800">
-                    {c.code && <span className="text-gray-400 mr-1.5">{c.code}</span>}
+                  <p className="text-sm font-medium text-[#1B2B6B]">
+                    {c.code && <span className="text-slate-500 mr-1.5">{c.code}</span>}
                     {c.name}
                   </p>
                   {c.logCount > 0 && (
-                    <p className="text-xs text-gray-400 mt-0.5">{c.logCount} case{c.logCount > 1 ? 's' : ''} logged</p>
+                    <p className="text-xs text-[#4A5568] mt-0.5">{c.logCount} case{c.logCount > 1 ? 's' : ''} logged</p>
                   )}
                 </div>
                 <StatusBadge status={c.status} logCount={c.logCount} competencyId={c.id} userId={user!.id} onUpdate={(id, status) => {
@@ -208,7 +208,7 @@ function StatusBadge({
           onClick={markSignedOff}
           disabled={updating}
           title="Mark as signed off"
-          className="text-xs text-gray-400 hover:text-green-600 transition-colors disabled:opacity-50"
+          className="text-xs text-slate-400 hover:text-emerald-600 transition-colors disabled:opacity-50"
         >
           ✓
         </button>
