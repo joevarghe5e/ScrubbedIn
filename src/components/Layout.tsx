@@ -25,9 +25,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <aside className="hidden md:flex flex-col w-56 fixed inset-y-0 bg-white border-r border-[#E2E8F0]">
         <div className="px-5 py-6 border-b border-[#E2E8F0]">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded flex items-center justify-center text-sm font-bold text-[#1B2B6B] border border-[#1B2B6B]">
-              S
-            </div>
+            <img src="/icon-192.png" alt="ScrubbedIn" className="w-7 h-7 rounded" />
             <span className="text-base font-bold text-[#1B2B6B]">ScrubbedIn</span>
           </div>
         </div>
