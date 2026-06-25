@@ -35,6 +35,8 @@ export type ReflectionFramework = 'STARR' | 'Gibbs'
 
 export interface Profile {
   id: string
+  first_name: string | null
+  last_name: string | null
   training_stage: TrainingStage | null
   curriculum: Curriculum | null
   specialty_interests: string[]

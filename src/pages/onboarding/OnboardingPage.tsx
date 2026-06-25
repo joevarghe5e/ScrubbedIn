@@ -32,6 +32,8 @@ export function OnboardingPage() {
   const navigate = useNavigate()
 
   const [step, setStep] = useState(1)
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
   const [trainingStage, setTrainingStage] = useState<TrainingStage | null>(null)
   const [curriculum, setCurriculum] = useState<Curriculum>('UKMLA')
   const [specialtyInterests, setSpecialtyInterests] = useState<string[]>([])
@@ -51,6 +53,8 @@ export function OnboardingPage() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { error } = await (supabase.from('profiles') as any).upsert({
       id: user.id,
+      first_name: firstName.trim(),
+      last_name: lastName.trim(),
       training_stage: trainingStage,
       curriculum,
       specialty_interests: specialtyInterests,
@@ -70,7 +74,7 @@ export function OnboardingPage() {
       <div className="w-full max-w-lg">
         {/* Progress bar */}
         <div className="flex gap-2 mb-8">
-          {[1, 2, 3].map(n => (
+          {[1, 2, 3, 4].map(n => (
             <div
               key={n}
               className={`h-1.5 flex-1 rounded-full transition-colors ${n <= step ? 'bg-brand-500' : 'bg-gray-200'}`}
@@ -80,6 +84,36 @@ export function OnboardingPage() {
 
         <div className="bg-white rounded shadow-sm border border-[#E2E8F0] p-8">
           {step === 1 && (
+            <>
+              <h2 className="text-xl font-semibold mb-1">What's your name?</h2>
+              <p className="text-gray-500 text-sm mb-6">This is how you'll appear in the app.</p>
+              <div className="space-y-3">
+                <input
+                  type="text"
+                  value={firstName}
+                  onChange={e => setFirstName(e.target.value)}
+                  placeholder="First name"
+                  className="w-full px-4 py-3 rounded border border-gray-200 text-sm focus:outline-none focus:border-[#1B2B6B]"
+                />
+                <input
+                  type="text"
+                  value={lastName}
+                  onChange={e => setLastName(e.target.value)}
+                  placeholder="Last name"
+                  className="w-full px-4 py-3 rounded border border-gray-200 text-sm focus:outline-none focus:border-[#1B2B6B]"
+                />
+              </div>
+              <button
+                disabled={!firstName.trim() || !lastName.trim()}
+                onClick={() => setStep(2)}
+                className="mt-6 w-full py-2.5 bg-white border border-[#1B2B6B] hover:bg-[#EEF2FF] disabled:opacity-40 text-[#1B2B6B] font-semibold rounded transition-colors"
+              >
+                Continue
+              </button>
+            </>
+          )}
+
+          {step === 2 && (
             <>
               <h2 className="text-xl font-semibold mb-1">What stage are you at?</h2>
               <p className="text-gray-500 text-sm mb-6">We'll tailor your portfolio to your level.</p>
@@ -100,7 +134,7 @@ export function OnboardingPage() {
               </div>
               <button
                 disabled={!trainingStage}
-                onClick={() => setStep(2)}
+                onClick={() => setStep(3)}
                 className="mt-6 w-full py-2.5 bg-white border border-[#1B2B6B] hover:bg-[#EEF2FF] disabled:opacity-40 text-[#1B2B6B] font-semibold rounded transition-colors"
               >
                 Continue
@@ -108,7 +142,7 @@ export function OnboardingPage() {
             </>
           )}
 
-          {step === 2 && (
+          {step === 3 && (
             <>
               <h2 className="text-xl font-semibold mb-1">Which curriculum are you following?</h2>
               <p className="text-gray-500 text-sm mb-6">This determines how we tag your cases and track progress.</p>
@@ -130,13 +164,13 @@ export function OnboardingPage() {
               </div>
               <div className="flex gap-3 mt-6">
                 <button
-                  onClick={() => setStep(1)}
+                  onClick={() => setStep(2)}
                   className="flex-1 py-2.5 border border-gray-300 text-gray-700 font-medium rounded hover:bg-gray-50 transition-colors"
                 >
                   Back
                 </button>
                 <button
-                  onClick={() => setStep(3)}
+                  onClick={() => setStep(4)}
                   className="flex-1 py-2.5 bg-white border border-[#1B2B6B] hover:bg-[#EEF2FF] text-[#1B2B6B] font-semibold rounded transition-colors"
                 >
                   Continue
@@ -145,7 +179,7 @@ export function OnboardingPage() {
             </>
           )}
 
-          {step === 3 && (
+          {step === 4 && (
             <>
               <h2 className="text-xl font-semibold mb-1">Which specialties interest you?</h2>
               <p className="text-gray-500 text-sm mb-6">
@@ -171,7 +205,7 @@ export function OnboardingPage() {
               )}
               <div className="flex gap-3 mt-6">
                 <button
-                  onClick={() => setStep(2)}
+                  onClick={() => setStep(3)}
                   className="flex-1 py-2.5 border border-gray-300 text-gray-700 font-medium rounded hover:bg-gray-50 transition-colors"
                 >
                   Back
