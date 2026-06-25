@@ -38,7 +38,7 @@ export function DashboardPage() {
   const [categories, setCategories] = useState<CompCategory[]>([])
   const [loading, setLoading] = useState(true)
 
-  const name = user?.email?.split('@')[0] ?? 'Doctor'
+  const name = profile?.first_name || user?.email?.split('@')[0] || 'Doctor'
 
   useEffect(() => {
     if (!user || !profile) return
