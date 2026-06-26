@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
 import { supabase } from '../../lib/supabase'
@@ -39,9 +39,6 @@ export function SessionDetailPage() {
   const [error, setError] = useState<string|null>(null)
   const [expanded, setExpanded] = useState<Set<string>>(new Set())
   const [checked, setChecked] = useState<Set<string>>(new Set())
-  const [timetableFile, setTimetableFile] = useState<{ base64: string; mediaType: string; name: string } | null>(null)
-  const [timetableError, setTimetableError] = useState<string | null>(null)
-  const timetableInputRef = useRef<HTMLInputElement>(null)
   const [mode, setMode] = useState<'brief' | 'full'>('brief')
 
   useEffect(() => {
@@ -52,23 +49,6 @@ export function SessionDetailPage() {
 
   function toggle(key: string) {
     setExpanded(p => { const n = new Set(p); n.has(key) ? n.delete(key) : n.add(key); return n })
-  }
-
-  async function handleTimetableUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
-    if (!file) return
-    e.target.value = ''
-    setTimetableError(null)
-
-    const isImage = file.type.startsWith('image/')
-    const isPdf = file.type === 'application/pdf'
-    if (!isImage && !isPdf) {
-      setTimetableError('Please upload an image (JPG, PNG) or PDF.')
-      return
-    }
-
-    const base64 = await fileToBase64(file)
-    setTimetableFile({ base64, mediaType: file.type, name: file.name })
   }
 
   async function generateBriefing() {
@@ -84,11 +64,7 @@ export function SessionDetailPage() {
       const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-briefing`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${authSess?.access_token}` },
-        body: JSON.stringify({
-          session, profile, outstandingCompetencies: outstanding,
-          timetableBase64: timetableFile?.base64,
-          timetableMediaType: timetableFile?.mediaType,
-        }),
+        body: JSON.stringify({ session, profile, outstandingCompetencies: outstanding }),
       })
       if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error ?? 'Failed')
       const { briefing } = await res.json()
@@ -132,25 +108,6 @@ export function SessionDetailPage() {
           </p>
           {session.notes && <p className="text-sm text-[#4A5568] mt-2">{session.notes}</p>}
         </div>
-      </div>
-
-      {/* Timetable upload */}
-      <div className="card-premium p-4 mb-4">
-        <p className="text-sm font-medium text-[#4A5568] mb-2">
-          Upload today's timetable or rota <span className="text-slate-500 font-normal">(optional)</span>
-        </p>
-        {timetableFile ? (
-          <div className="flex items-center justify-between bg-[#EEF2FF] rounded px-3 py-2.5">
-            <span className="text-sm text-[#1B2B6B] truncate">📎 {timetableFile.name}</span>
-            <button onClick={() => setTimetableFile(null)} className="text-slate-500 hover:text-[#1B2B6B] text-sm ml-2 flex-shrink-0">✕</button>
-          </div>
-        ) : (
-          <button onClick={() => timetableInputRef.current?.click()} className="w-full btn-ghost text-sm">
-            📎 Upload PDF or photo
-          </button>
-        )}
-        <input ref={timetableInputRef} type="file" accept="image/*,.pdf" className="hidden" onChange={handleTimetableUpload} />
-        {timetableError && <p className="text-xs text-red-600 mt-2">{timetableError}</p>}
       </div>
 
       {!briefing ? (
@@ -212,9 +169,9 @@ export function SessionDetailPage() {
                   </ul>
                 </div>
               )}
-              {briefing.sign_offs_to_chase?.length > 0 && (
-                <div className="card-premium p-4">
-                  <p className="text-sm font-semibold text-[#1B2B6B] mb-2">🎯 Sign-Offs to Chase Today</p>
+              <div className="card-premium p-4">
+                <p className="text-sm font-semibold text-[#1B2B6B] mb-2">🎯 Sign-Offs to Chase Today</p>
+                {briefing.sign_offs_to_chase?.length > 0 ? (
                   <div className="space-y-2">
                     {briefing.sign_offs_to_chase.map((s, i) => (
                       <div key={i} className="bg-[#EEF2FF] rounded px-3 py-2.5">
@@ -223,8 +180,10 @@ export function SessionDetailPage() {
                       </div>
                     ))}
                   </div>
-                </div>
-              )}
+                ) : (
+                  <p className="text-sm text-[#4A5568]">No outstanding sign-offs</p>
+                )}
+              </div>
               {briefing.red_flags?.length > 0 && (
                 <div className="card-premium p-4">
                   <p className="text-sm font-semibold text-[#1B2B6B] mb-2">🚨 Red Flags</p>
@@ -240,7 +199,8 @@ export function SessionDetailPage() {
 
           {mode === 'full' && SECTIONS.map(sec => {
             const content = briefing[sec.key]
-            if (!content || (Array.isArray(content) && content.length === 0)) return null
+            const isEmpty = !content || (Array.isArray(content) && content.length === 0)
+            if (isEmpty && sec.type !== 'signoffs') return null
             const isOpen = expanded.has(sec.key as string)
 
             return (
@@ -305,14 +265,18 @@ export function SessionDetailPage() {
                       </ul>
                     )}
                     {sec.type === 'signoffs' && (
-                      <div className="mt-3 space-y-2">
-                        {(content as { opportunity: string; reason: string }[]).map((s, i) => (
-                          <div key={i} className="bg-[#EEF2FF] rounded px-3 py-2.5">
-                            <p className="text-sm font-semibold text-[#1B2B6B]">{s.opportunity}</p>
-                            <p className="text-xs text-[#4A5568] mt-0.5">{s.reason}</p>
-                          </div>
-                        ))}
-                      </div>
+                      isEmpty ? (
+                        <p className="text-sm text-[#4A5568] mt-3">No outstanding sign-offs</p>
+                      ) : (
+                        <div className="mt-3 space-y-2">
+                          {(content as { opportunity: string; reason: string }[]).map((s, i) => (
+                            <div key={i} className="bg-[#EEF2FF] rounded px-3 py-2.5">
+                              <p className="text-sm font-semibold text-[#1B2B6B]">{s.opportunity}</p>
+                              <p className="text-xs text-[#4A5568] mt-0.5">{s.reason}</p>
+                            </div>
+                          ))}
+                        </div>
+                      )
                     )}
                   </div>
                   </div>
@@ -341,14 +305,3 @@ export function SessionDetailPage() {
   )
 }
 
-async function fileToBase64(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = () => {
-      const result = reader.result as string
-      resolve(result.split(',')[1])
-    }
-    reader.onerror = reject
-    reader.readAsDataURL(file)
-  })
-}
