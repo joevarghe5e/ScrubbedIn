@@ -181,7 +181,6 @@ export function SessionDetailPage() {
               </div>
               <div>
                 <p className="font-semibold text-[#1B2B6B]">Generating your briefing…</p>
-                <p className="text-sm text-[#4A5568] mt-1">Claude is preparing all 10 sections</p>
               </div>
             </div>
           )}
