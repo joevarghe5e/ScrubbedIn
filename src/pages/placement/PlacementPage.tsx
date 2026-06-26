@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
 import { supabase } from '../../lib/supabase'
 import { Layout } from '../../components/Layout'
+import { timeSlotFromTime, MAX_SESSIONS_PER_DAY } from '../../lib/colors'
 import type { WeeklySession, SessionType } from '../../lib/types'
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
-const SLOTS = ['morning', 'afternoon'] as const
 
 const SESSION_TYPES: SessionType[] = ['Ward Round', 'Theatre', 'Clinic', 'Lecture', 'Tutorial', 'Other']
 
@@ -63,12 +63,13 @@ export function PlacementPage() {
   const [parseError, setParseError] = useState<string | null>(null)
 
   // Add session modal
-  const [addModal, setAddModal] = useState<{ day: number; slot: 'morning' | 'afternoon' } | null>(null)
+  const [addModal, setAddModal] = useState<{ day: number } | null>(null)
   const [formName, setFormName] = useState('')
   const [formType, setFormType] = useState<SessionType>('Ward Round')
   const [formSpecialty, setFormSpecialty] = useState('')
   const [formLocation, setFormLocation] = useState('')
   const [formNotes, setFormNotes] = useState('')
+  const [formStartTime, setFormStartTime] = useState('09:00')
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
@@ -85,8 +86,10 @@ export function PlacementPage() {
       })
   }, [user, weekStart])
 
-  function getSession(day: number, slot: 'morning' | 'afternoon') {
-    return sessions.find(s => s.day_of_week === day && s.time_slot === slot) ?? null
+  function getDaySessions(day: number) {
+    return sessions
+      .filter(s => s.day_of_week === day)
+      .sort((a, b) => (a.start_time ?? '23:59').localeCompare(b.start_time ?? '23:59'))
   }
 
   function changeWeek(dir: number) {
@@ -147,13 +150,25 @@ export function PlacementPage() {
         return
       }
 
-      // Insert parsed sessions (skip slots already filled)
-      const toInsert = parsed
-        .filter((s: { day_of_week: number; time_slot: string }) =>
-          !sessions.find(ex => ex.day_of_week === s.day_of_week && ex.time_slot === s.time_slot)
-        )
+      // Cap each day at MAX_SESSIONS_PER_DAY total (existing + newly parsed),
+      // keeping the earliest-starting sessions first.
+      const remainingSlotsByDay = new Map<number, number>()
+      for (let d = 1; d <= 5; d++) {
+        remainingSlotsByDay.set(d, MAX_SESSIONS_PER_DAY - sessions.filter(s => s.day_of_week === d).length)
+      }
+      const sortedParsed = [...parsed].sort((a, b) =>
+        (a.start_time ?? '23:59').localeCompare(b.start_time ?? '23:59')
+      )
+      const toInsert = sortedParsed
+        .filter((s: { day_of_week: number }) => {
+          const remaining = remainingSlotsByDay.get(s.day_of_week) ?? 0
+          if (remaining <= 0) return false
+          remainingSlotsByDay.set(s.day_of_week, remaining - 1)
+          return true
+        })
         .map((s: Record<string, unknown>) => ({
           ...s,
+          time_slot: timeSlotFromTime((s.start_time as string) ?? '09:00'),
           user_id: user.id,
           week_start: toISODate(weekStart),
         }))
@@ -169,9 +184,9 @@ export function PlacementPage() {
     }
   }
 
-  function openAddModal(day: number, slot: 'morning' | 'afternoon') {
-    setAddModal({ day, slot })
-    setFormName(''); setFormType('Ward Round'); setFormSpecialty(''); setFormLocation(''); setFormNotes('')
+  function openAddModal(day: number) {
+    setAddModal({ day })
+    setFormName(''); setFormType('Ward Round'); setFormSpecialty(''); setFormLocation(''); setFormNotes(''); setFormStartTime('09:00')
   }
 
   async function handleAddSession(e: React.FormEvent) {
@@ -182,7 +197,8 @@ export function PlacementPage() {
       user_id: user.id,
       week_start: toISODate(weekStart),
       day_of_week: addModal.day,
-      time_slot: addModal.slot,
+      time_slot: timeSlotFromTime(formStartTime),
+      start_time: formStartTime,
       session_name: formName || null,
       session_type: formType,
       specialty: formSpecialty || null,
@@ -246,33 +262,28 @@ export function PlacementPage() {
         <div className="space-y-3">
           {DAYS.map((dayName, idx) => {
             const dayNum = idx + 1
+            const daySessions = getDaySessions(dayNum)
             return (
               <div key={dayName}>
                 <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5">{dayName}</p>
-                <div className="grid grid-cols-2 gap-2">
-                  {SLOTS.map(slot => {
-                    const sess = getSession(dayNum, slot)
-                    if (sess) {
-                      return (
-                        <SessionCard
-                          key={slot}
-                          session={sess}
-                          onOpen={() => navigate(`/placement/session/${sess.id}`)}
-                          onDelete={() => deleteSession(sess.id)}
-                        />
-                      )
-                    }
-                    return (
-                      <button
-                        key={slot}
-                        onClick={() => openAddModal(dayNum, slot)}
-                        className="h-16 rounded border-2 border-dashed border-[#E2E8F0] flex flex-col items-center justify-center text-slate-400 hover:border-[#1B2B6B]/40 hover:text-[#4A5568] transition-colors"
-                      >
-                        <span className="text-xl leading-none">+</span>
-                        <span className="text-xs mt-0.5 capitalize">{slot}</span>
-                      </button>
-                    )
-                  })}
+                <div className="space-y-2">
+                  {daySessions.map(sess => (
+                    <SessionCard
+                      key={sess.id}
+                      session={sess}
+                      onOpen={() => navigate(`/placement/session/${sess.id}`)}
+                      onDelete={() => deleteSession(sess.id)}
+                    />
+                  ))}
+                  {daySessions.length < MAX_SESSIONS_PER_DAY && (
+                    <button
+                      onClick={() => openAddModal(dayNum)}
+                      className="w-full h-12 rounded border-2 border-dashed border-[#E2E8F0] flex items-center justify-center gap-1.5 text-slate-400 hover:border-[#1B2B6B]/40 hover:text-[#4A5568] transition-colors"
+                    >
+                      <span className="text-lg leading-none">+</span>
+                      <span className="text-xs">Add session</span>
+                    </button>
+                  )}
                 </div>
               </div>
             )
@@ -286,18 +297,27 @@ export function PlacementPage() {
           <div className="bg-white rounded w-full max-w-sm p-5 shadow-xl border border-[#E2E8F0]">
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-semibold text-[#1B2B6B]">
-                Add session — {DAYS[addModal.day - 1]} {addModal.slot}
+                Add session — {DAYS[addModal.day - 1]}
               </h2>
               <button onClick={() => setAddModal(null)} className="text-slate-500 hover:text-[#1B2B6B]">✕</button>
             </div>
             <form onSubmit={handleAddSession} className="space-y-3">
-              <div>
-                <label className="block text-sm font-medium text-[#4A5568] mb-1">Session name</label>
-                <input
-                  type="text" required value={formName} onChange={e => setFormName(e.target.value)}
-                  placeholder="e.g. Acute Medical Ward Round"
-                  className="w-full px-3 py-2 border border-[#E2E8F0] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#1B2B6B]/30"
-                />
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-sm font-medium text-[#4A5568] mb-1">Start time</label>
+                  <input
+                    type="time" required value={formStartTime} onChange={e => setFormStartTime(e.target.value)}
+                    className="w-full px-3 py-2 border border-[#E2E8F0] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#1B2B6B]/30"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-[#4A5568] mb-1">Session name</label>
+                  <input
+                    type="text" required value={formName} onChange={e => setFormName(e.target.value)}
+                    placeholder="e.g. Ward Round"
+                    className="w-full px-3 py-2 border border-[#E2E8F0] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#1B2B6B]/30"
+                  />
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
@@ -354,7 +374,10 @@ function SessionCard({ session, onOpen, onDelete }: {
       onClick={onOpen}>
       <div className="flex items-start justify-between gap-1">
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold leading-tight truncate">{session.session_name ?? 'Session'}</p>
+          <div className="flex items-baseline gap-2">
+            {session.start_time && <span className="text-xs font-bold opacity-70 flex-shrink-0">{session.start_time}</span>}
+            <p className="text-sm font-semibold leading-tight truncate">{session.session_name ?? 'Session'}</p>
+          </div>
           {session.session_type && (
             <span className={`inline-block text-xs rounded px-1.5 py-0.5 mt-1 font-medium ${badgeClass}`}>
               {session.session_type}

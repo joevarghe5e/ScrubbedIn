@@ -50,3 +50,12 @@ export function formatDate(dateStr: string | null | undefined) {
   const d = new Date(dateStr)
   return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
 }
+
+// 'morning' before noon, 'afternoon' from noon onward — kept only for the
+// legacy time_slot column, sessions are otherwise ordered by start_time.
+export function timeSlotFromTime(startTime: string): 'morning' | 'afternoon' {
+  const hour = parseInt(startTime.split(':')[0], 10)
+  return hour < 12 ? 'morning' : 'afternoon'
+}
+
+export const MAX_SESSIONS_PER_DAY = 6

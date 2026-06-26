@@ -126,7 +126,7 @@ export function SessionDetailPage() {
           </div>
           <h1 className="text-lg font-bold text-[#1B2B6B]">{session.session_name ?? 'Session'}</h1>
           <p className="text-sm text-[#4A5568] mt-1">
-            {DAYS[session.day_of_week]} · {session.time_slot.charAt(0).toUpperCase() + session.time_slot.slice(1)}
+            {DAYS[session.day_of_week]}{session.start_time && ` · ${session.start_time}`}
             {session.location && ` · ${session.location}`}
             {session.specialty && ` · ${session.specialty}`}
           </p>

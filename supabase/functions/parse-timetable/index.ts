@@ -28,9 +28,9 @@ serve(async (req) => {
 
     const prompt = `You are extracting a medical student/junior doctor's weekly timetable from this image.
 
-Extract every session visible and return a JSON array. Each session should have:
+Extract every session visible and return a JSON array, in chronological order. A single day can have multiple sessions — extract all of them, up to a maximum of 6 per day. Each session should have:
 - day_of_week: number (1=Monday, 2=Tuesday, 3=Wednesday, 4=Thursday, 5=Friday)
-- time_slot: "morning" or "afternoon"
+- start_time: the session's start time in 24-hour "HH:MM" format (e.g. "08:30", "14:00"). Read the actual time off the timetable if shown; if only a vague slot like "AM"/"PM" is given, estimate a sensible time (e.g. "09:00" for AM, "14:00" for PM).
 - session_name: the name/title of the session (e.g. "Acute Medical Ward Round", "Emergency Theatre List", "GP Respiratory Clinic")
 - session_type: one of "Ward Round", "Theatre", "Clinic", "Lecture", "Tutorial", "Other"
 - specialty: the medical specialty (e.g. "General Medicine", "Surgery", "General Practice", "Emergency Medicine", "Cardiology")
@@ -38,8 +38,9 @@ Extract every session visible and return a JSON array. Each session should have:
 
 Return ONLY a valid JSON array, no explanation. Example:
 [
-  {"day_of_week": 1, "time_slot": "morning", "session_name": "Acute Medical Ward Round", "session_type": "Ward Round", "specialty": "General Medicine", "location": "Ward 4B"},
-  {"day_of_week": 2, "time_slot": "morning", "session_name": "Emergency Theatre List", "session_type": "Theatre", "specialty": "Surgery", "location": "Theatre 2"}
+  {"day_of_week": 1, "start_time": "08:00", "session_name": "Acute Medical Ward Round", "session_type": "Ward Round", "specialty": "General Medicine", "location": "Ward 4B"},
+  {"day_of_week": 1, "start_time": "13:30", "session_name": "GP Respiratory Clinic", "session_type": "Clinic", "specialty": "General Practice", "location": "Outpatients B"},
+  {"day_of_week": 2, "start_time": "09:00", "session_name": "Emergency Theatre List", "session_type": "Theatre", "specialty": "Surgery", "location": "Theatre 2"}
 ]
 
 If you cannot read the timetable clearly, return an empty array [].`

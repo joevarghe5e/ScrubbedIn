@@ -8,6 +8,7 @@ export interface WeeklySession {
   week_start: string        // ISO date string — Monday of the week
   day_of_week: number       // 1=Mon … 5=Fri
   time_slot: TimeSlot
+  start_time: string | null // 'HH:MM', 24h — used to order sessions within a day
   session_name: string | null
   session_type: SessionType | null
   specialty: string | null
