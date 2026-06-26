@@ -46,6 +46,10 @@ Return ONLY a valid JSON array, no explanation. Example:
 
 If you cannot read the timetable clearly, return an empty array [].`
 
+    const fileBlock = mediaType === 'application/pdf'
+      ? { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: imageBase64 } }
+      : { type: 'image', source: { type: 'base64', media_type: mediaType ?? 'image/jpeg', data: imageBase64 } }
+
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -58,17 +62,7 @@ If you cannot read the timetable clearly, return an empty array [].`
         max_tokens: 1000,
         messages: [{
           role: 'user',
-          content: [
-            {
-              type: 'image',
-              source: {
-                type: 'base64',
-                media_type: mediaType ?? 'image/jpeg',
-                data: imageBase64,
-              },
-            },
-            { type: 'text', text: prompt },
-          ],
+          content: [fileBlock, { type: 'text', text: prompt }],
         }],
       }),
     })
