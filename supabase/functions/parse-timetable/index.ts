@@ -58,7 +58,7 @@ If you cannot read the timetable clearly, return an empty array [].`
         'content-type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'claude-opus-4-5',
+        model: 'claude-haiku-4-5',
         max_tokens: 1000,
         messages: [{
           role: 'user',
