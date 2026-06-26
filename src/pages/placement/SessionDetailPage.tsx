@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
 import { supabase } from '../../lib/supabase'
@@ -12,7 +12,7 @@ interface SectionDef {
   icon: string
   title: string
   key: keyof SessionBriefing
-  type: 'text' | 'list' | 'conditions' | 'checklist' | 'redflags'
+  type: 'text' | 'list' | 'conditions' | 'checklist' | 'redflags' | 'signoffs'
 }
 
 const SECTIONS: SectionDef[] = [
@@ -26,6 +26,7 @@ const SECTIONS: SectionDef[] = [
   { icon: '🔍', title: 'Things to Look Up Before', key: 'things_to_look_up',     type: 'list' },
   { icon: '🚨', title: 'Red Flags',               key: 'red_flags',              type: 'redflags' },
   { icon: '✍️', title: 'Reflection Prompts',      key: 'reflection_prompts',     type: 'list' },
+  { icon: '🎯', title: 'Sign-Offs to Chase Today', key: 'sign_offs_to_chase',    type: 'signoffs' },
 ]
 
 export function SessionDetailPage() {
@@ -36,8 +37,12 @@ export function SessionDetailPage() {
   const [loading, setLoading] = useState(true)
   const [generating, setGenerating] = useState(false)
   const [error, setError] = useState<string|null>(null)
-  const [expanded, setExpanded] = useState<Set<string>>(new Set(['session_summary','curriculum_objectives']))
+  const [expanded, setExpanded] = useState<Set<string>>(new Set())
   const [checked, setChecked] = useState<Set<string>>(new Set())
+  const [timetableFile, setTimetableFile] = useState<{ base64: string; mediaType: string; name: string } | null>(null)
+  const [timetableError, setTimetableError] = useState<string | null>(null)
+  const timetableInputRef = useRef<HTMLInputElement>(null)
+  const [mode, setMode] = useState<'brief' | 'full'>('brief')
 
   useEffect(() => {
     if (!user || !id) return
@@ -47,6 +52,23 @@ export function SessionDetailPage() {
 
   function toggle(key: string) {
     setExpanded(p => { const n = new Set(p); n.has(key) ? n.delete(key) : n.add(key); return n })
+  }
+
+  async function handleTimetableUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    e.target.value = ''
+    setTimetableError(null)
+
+    const isImage = file.type.startsWith('image/')
+    const isPdf = file.type === 'application/pdf'
+    if (!isImage && !isPdf) {
+      setTimetableError('Please upload an image (JPG, PNG) or PDF.')
+      return
+    }
+
+    const base64 = await fileToBase64(file)
+    setTimetableFile({ base64, mediaType: file.type, name: file.name })
   }
 
   async function generateBriefing() {
@@ -62,13 +84,17 @@ export function SessionDetailPage() {
       const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-briefing`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${authSess?.access_token}` },
-        body: JSON.stringify({ session, profile, outstandingCompetencies: outstanding }),
+        body: JSON.stringify({
+          session, profile, outstandingCompetencies: outstanding,
+          timetableBase64: timetableFile?.base64,
+          timetableMediaType: timetableFile?.mediaType,
+        }),
       })
       if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error ?? 'Failed')
       const { briefing } = await res.json()
       await supabase.from('weekly_sessions').update({ briefing_json: briefing }).eq('id', session.id)
       setSession(p => p ? { ...p, briefing_json: briefing } : p)
-      setExpanded(new Set(SECTIONS.map(s => s.key as string)))
+      setExpanded(new Set())
     } catch (e) { setError(e instanceof Error ? e.message : 'Failed') }
     finally { setGenerating(false) }
   }
@@ -108,6 +134,25 @@ export function SessionDetailPage() {
         </div>
       </div>
 
+      {/* Timetable upload */}
+      <div className="card-premium p-4 mb-4">
+        <p className="text-sm font-medium text-[#4A5568] mb-2">
+          Upload today's timetable or rota <span className="text-slate-500 font-normal">(optional)</span>
+        </p>
+        {timetableFile ? (
+          <div className="flex items-center justify-between bg-[#EEF2FF] rounded px-3 py-2.5">
+            <span className="text-sm text-[#1B2B6B] truncate">📎 {timetableFile.name}</span>
+            <button onClick={() => setTimetableFile(null)} className="text-slate-500 hover:text-[#1B2B6B] text-sm ml-2 flex-shrink-0">✕</button>
+          </div>
+        ) : (
+          <button onClick={() => timetableInputRef.current?.click()} className="w-full btn-ghost text-sm">
+            📎 Upload PDF or photo
+          </button>
+        )}
+        <input ref={timetableInputRef} type="file" accept="image/*,.pdf" className="hidden" onChange={handleTimetableUpload} />
+        {timetableError && <p className="text-xs text-red-600 mt-2">{timetableError}</p>}
+      </div>
+
       {!briefing ? (
         <div className="card-premium p-6 text-center mb-4">
           {!generating ? (
@@ -144,7 +189,57 @@ export function SessionDetailPage() {
         </div>
       ) : (
         <div className="space-y-2 mb-4">
-          {SECTIONS.map(sec => {
+          {/* Brief / Full toggle */}
+          <div className="flex gap-1 p-1 bg-[#EEF2FF] rounded w-fit mb-1">
+            {(['brief', 'full'] as const).map(m => (
+              <button key={m} onClick={() => setMode(m)}
+                className={`px-4 py-1.5 rounded text-sm font-semibold transition-colors capitalize ${
+                  mode === m ? 'bg-[#1B2B6B] text-white' : 'text-[#1B2B6B] border border-[#1B2B6B]/30 hover:bg-white'
+                }`}>
+                {m}
+              </button>
+            ))}
+          </div>
+
+          {mode === 'brief' && (
+            <>
+              {briefing.brief_summary?.length > 0 && (
+                <div className="card-premium p-4">
+                  <p className="text-sm font-semibold text-[#1B2B6B] mb-2">📋 At a Glance</p>
+                  <ul className="space-y-1.5">
+                    {briefing.brief_summary.map((b, i) => (
+                      <li key={i} className="flex gap-2 text-sm text-[#4A5568]"><span className="text-[#1B2B6B] flex-shrink-0">•</span>{b}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {briefing.sign_offs_to_chase?.length > 0 && (
+                <div className="card-premium p-4">
+                  <p className="text-sm font-semibold text-[#1B2B6B] mb-2">🎯 Sign-Offs to Chase Today</p>
+                  <div className="space-y-2">
+                    {briefing.sign_offs_to_chase.map((s, i) => (
+                      <div key={i} className="bg-[#EEF2FF] rounded px-3 py-2.5">
+                        <p className="text-sm font-semibold text-[#1B2B6B]">{s.opportunity}</p>
+                        <p className="text-xs text-[#4A5568] mt-0.5">{s.reason}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {briefing.red_flags?.length > 0 && (
+                <div className="card-premium p-4">
+                  <p className="text-sm font-semibold text-[#1B2B6B] mb-2">🚨 Red Flags</p>
+                  <ul className="space-y-1.5">
+                    {briefing.red_flags.map((f, i) => (
+                      <li key={i} className="flex gap-2 text-sm text-[#4A5568]"><span className="flex-shrink-0">🚨</span>{f}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </>
+          )}
+
+          {mode === 'full' && SECTIONS.map(sec => {
             const content = briefing[sec.key]
             if (!content || (Array.isArray(content) && content.length === 0)) return null
             const isOpen = expanded.has(sec.key as string)
@@ -156,10 +251,11 @@ export function SessionDetailPage() {
                   <span className="flex items-center gap-2.5 text-sm font-semibold text-[#1B2B6B]">
                     <span>{sec.icon}</span>{sec.title}
                   </span>
-                  <span className="text-slate-500 text-xs">{isOpen ? '▲' : '▼'}</span>
+                  <span className={`text-slate-500 text-xs transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}>▼</span>
                 </button>
 
-                {isOpen && (
+                <div className={`grid transition-all duration-200 ease-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                  <div className="overflow-hidden min-h-0">
                   <div className="px-4 pb-4 border-t border-[#E2E8F0]">
                     {sec.type === 'text' && (
                       <p className="text-sm text-[#4A5568] mt-3 leading-relaxed">{content as string}</p>
@@ -209,8 +305,19 @@ export function SessionDetailPage() {
                         ))}
                       </ul>
                     )}
+                    {sec.type === 'signoffs' && (
+                      <div className="mt-3 space-y-2">
+                        {(content as { opportunity: string; reason: string }[]).map((s, i) => (
+                          <div key={i} className="bg-[#EEF2FF] rounded px-3 py-2.5">
+                            <p className="text-sm font-semibold text-[#1B2B6B]">{s.opportunity}</p>
+                            <p className="text-xs text-[#4A5568] mt-0.5">{s.reason}</p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                )}
+                  </div>
+                </div>
               </div>
             )
           })}
@@ -233,4 +340,16 @@ export function SessionDetailPage() {
       </Link>
     </Layout>
   )
+}
+
+async function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => {
+      const result = reader.result as string
+      resolve(result.split(',')[1])
+    }
+    reader.onerror = reject
+    reader.readAsDataURL(file)
+  })
 }

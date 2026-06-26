@@ -18,6 +18,7 @@ export interface WeeklySession {
 }
 
 export interface SessionBriefing {
+  brief_summary: string[]
   session_summary: string
   curriculum_objectives: string[]
   conditions_to_expect: { name: string; key_points: string }[]
@@ -28,6 +29,7 @@ export interface SessionBriefing {
   things_to_look_up: string[]
   red_flags: string[]
   reflection_prompts: string[]
+  sign_offs_to_chase: { opportunity: string; reason: string }[]
 }
 export type Curriculum = 'UKMLA' | 'USMLE' | 'AMC' | 'PLAB'
 export type CompetencyStatus = 'observed' | 'performed' | 'signed_off'
